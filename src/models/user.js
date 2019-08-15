@@ -1,8 +1,8 @@
-import { Schema, model } from 'mongoose';
+const mongoose = require('mongoose');
 const mongooseDelete = require('mongoose-delete');
 const findOrCreate = require('mongoose-findorcreate');
 
-const UserSchema = Schema({
+const UserSchema = mongoose.Schema({
     id: String,
     name: String,
     login: String,
@@ -17,4 +17,4 @@ const UserSchema = Schema({
 UserSchema.plugin(mongooseDelete);
 UserSchema.plugin(findOrCreate);
 
-export default model('User', UserSchema);
+module.exports = mongoose.model('User', UserSchema);
