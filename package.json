@@ -1,0 +1,27 @@
+{
+  "name": "ohne-api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Everton Oliveira",
+  "license": "MIT",
+  "scripts": {
+    "dev": "nodemon -r esm src/index.js",
+    "start": "node -r esm src/index.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^8.0.0",
+    "esm": "^3.2.25",
+    "express": "^4.17.1",
+    "pg": "^7.11.0",
+    "pg-hstore": "^2.3.3",
+    "sequelize": "^5.8.9",
+    "sequelize-cli": "^5.5.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
+    "babel-preset-env": "^1.7.0",
+    "nodemon": "^1.19.1"
+  }
+}
