@@ -1,14 +1,16 @@
-import express, { json } from 'express'
-import cors from 'cors'
-import { port, env } from '../config/constants'
+const express = require('express')
+const cors = require('cors')
+const { port, env } = require('../config/constants')
 const mongoose = require('mongoose')
 const credentials = require('../config/credentials')
 const swaggerUi = require('swagger-ui-express');
 const YAML = require('yamljs');
 const swaggerDocument = YAML.load('./swagger.yaml');
+const app = express()
 
 var opts = {
-    keepAlive: 1
+    keepAlive: 1,
+    useNewUrlParser: true
 };
 
 switch (env) {
@@ -25,8 +27,7 @@ switch (env) {
             app.get('env'));
 }
 
-const app = express()
-app.use(json())
+app.use(express.json())
 
 app.use(cors())
 
