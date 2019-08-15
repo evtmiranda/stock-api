@@ -6,6 +6,7 @@ const credentials = require('../config/credentials')
 const swaggerUi = require('swagger-ui-express');
 const YAML = require('yamljs');
 const swaggerDocument = YAML.load('./swagger.yaml');
+const app = express()
 
 var opts = {
     keepAlive: 1
@@ -25,7 +26,6 @@ switch (env) {
             app.get('env'));
 }
 
-const app = express()
 app.use(json())
 
 app.use(cors())

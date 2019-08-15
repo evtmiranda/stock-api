@@ -4,9 +4,9 @@ info:
   title: Stock API
   description: A simple API to manage stock.
 schemes:
-  - http
   - https
-host: localhost:3002
+  - http
+host: fit-stock-api.herokuapp.com
 basePath: /api/v1
 tags:
 - name: "user"
