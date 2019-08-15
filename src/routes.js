@@ -1,7 +1,13 @@
-import { Router } from 'express'
-import { index } from './controllers/HelloWorldController'
-const routes = Router()
+const express = require('express');
+const routes = express.Router();
 
-routes.get('/', index)
+const HelloWorldController = require('./controllers/HelloWorldController');
+const UserController = require('./controllers/UserController');
 
-export default routes
+routes.get('/', HelloWorldController.index)
+routes.get('/user', UserController.getAll)
+routes.post('/user', UserController.create)
+routes.delete('/user/:id', UserController.delete)
+routes.put('/user/:id', UserController.update)
+
+module.exports = routes;

@@ -1,39 +1,20 @@
-module.exports = (sequelize, DataTypes) => {
-    const User = sequelize.define('User', {
-        id: {
-            type: DataTypes.INTEGER,
-            primaryKey: true
-        },
-        name: {
-            type: DataTypes.STRING(20),
-            allowNull: false
-        },
-        email: {
-            type: DataTypes.STRING(100),
-            allowNull: false
-        },
-        secretKey: {
-            field: 'secret_key',
-            type: DataTypes.STRING(50),
-            allowNull: false
-        },
-        createdAt: {
-            field: 'created_at',
-            type: 'TIMESTAMP'
-        },
-        updatedAt: {
-            field: 'updated_at',
-            type: 'TIMESTAMP'
-        },
-        deletedAt: {
-            field: 'deleted_at',
-            type: 'TIMESTAMP'
-        },
-    }, {
-            sequelize,
-            freezeTableName: true,
-            tableName: 'users'
-        })
+import { Schema, model } from 'mongoose';
+const mongooseDelete = require('mongoose-delete');
+const findOrCreate = require('mongoose-findorcreate');
 
-    return User
-}
+const UserSchema = Schema({
+    id: String,
+    name: String,
+    login: String,
+    password: String,
+    profileId: Number
+},
+    {
+        timestamps: true
+    }
+);
+
+UserSchema.plugin(mongooseDelete);
+UserSchema.plugin(findOrCreate);
+
+export default model('User', UserSchema);
