@@ -14,9 +14,13 @@
     "esm": "^3.2.25",
     "express": "^4.17.1",
     "mongoose": "^5.6.9",
+    "mongoose-delete": "^0.5.0",
+    "mongoose-findorcreate": "^3.0.0",
     "pg": "^7.11.0",
     "pg-hstore": "^2.3.3",
-    "sequelize-cli": "^5.5.0"
+    "sequelize-cli": "^5.5.0",
+    "swagger-ui-express": "^4.0.7",
+    "yamljs": "^0.3.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
