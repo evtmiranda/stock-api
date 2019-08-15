@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   version: 1.0.0
   title: Stock API
-  description: A simple API to manage stock.
+  description: A simple API to manage stock
 schemes:
   - https
   - http
