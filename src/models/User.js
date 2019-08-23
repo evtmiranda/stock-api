@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const mongooseDelete = require('mongoose-delete');
 const findOrCreate = require('mongoose-findorcreate');
+const mongooseFindAndFilter = require('mongoose-find-and-filter');
 
 const UserSchema = mongoose.Schema({
     id: String,
@@ -16,5 +17,6 @@ const UserSchema = mongoose.Schema({
 
 UserSchema.plugin(mongooseDelete);
 UserSchema.plugin(findOrCreate);
+UserSchema.plugin(mongooseFindAndFilter);
 
 module.exports = mongoose.model('User', UserSchema);

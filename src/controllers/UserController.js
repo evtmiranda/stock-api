@@ -1,13 +1,21 @@
 const User = require('../models/User');
 
 module.exports = {
-    async getAll(_req, res) {
+    async get(req, res) {
         try {
-            const users = await User.find({ deleted: false }).sort('-createdAt');
+            let query = req.query;
+            let queryParams = {};
+            let protectedKeys = ['password'];
+
+            let users = await User.findAndFilter(query, queryParams, protectedKeys);
+
+            users = users.sort((a, b) => {
+                return b.createdAt - a.createdAt
+            });
 
             return res.json(users);
         } catch (error) {
-            return res.status(500).json({ error: "Ops! Something went wrong." })
+            return res.status(500).json({ error: "Ops! Something went wrong." });
         }
     },
 

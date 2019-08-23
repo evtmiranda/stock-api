@@ -4,14 +4,14 @@ const routes = express.Router();
 const UserController = require('./controllers/UserController');
 const ItemController = require('./controllers/ItemController');
 
-routes.get('/user', UserController.getAll)
-routes.post('/user', UserController.create)
-routes.delete('/user/:id', UserController.delete)
-routes.put('/user/:id', UserController.update)
+routes.get('/users', UserController.get)
+routes.post('/users', UserController.create)
+routes.delete('/users/:id', UserController.delete)
+routes.put('/users/:id', UserController.update)
 
-routes.get('/item', ItemController.getAll)
-routes.post('/item', ItemController.create)
-routes.delete('/item/:id', ItemController.delete)
-routes.put('/item/:id', ItemController.update)
+routes.get('/items', ItemController.getAll)
+routes.post('/items', ItemController.create)
+routes.delete('/items/:id', ItemController.delete)
+routes.put('/items/:id', ItemController.update)
 
 module.exports = routes;
