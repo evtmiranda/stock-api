@@ -14,6 +14,7 @@
     "express": "^4.17.1",
     "mongoose": "^5.6.9",
     "mongoose-delete": "^0.5.0",
+    "mongoose-find-and-filter": "^1.0.0",
     "mongoose-findorcreate": "^3.0.0",
     "pg": "^7.11.0",
     "pg-hstore": "^2.3.3",
