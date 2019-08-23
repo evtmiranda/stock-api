@@ -21,11 +21,11 @@ module.exports = {
 
     async create(req, res) {
         try {
-            const { name, login, password, profileId } = req.body;
+            const { name, username, password, profileId } = req.body;
 
             const user = await User.findOrCreate({
                 name,
-                login,
+                username,
                 password,
                 profileId
             });
@@ -39,11 +39,11 @@ module.exports = {
     async update(req, res) {
         try {
             const id = req.params.id;
-            const { name, login, password, profileId } = req.body;
+            const { name, username, password, profileId } = req.body;
 
             const user = await User.updateOne({ _id: id }, {
                 name,
-                login,
+                username,
                 password,
                 profileId
             });
