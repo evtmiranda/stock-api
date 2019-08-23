@@ -6,7 +6,7 @@ const mongooseFindAndFilter = require('mongoose-find-and-filter');
 const UserSchema = mongoose.Schema({
     id: String,
     name: String,
-    login: String,
+    username: String,
     password: String,
     profileId: Number
 },
