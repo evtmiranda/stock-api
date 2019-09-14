@@ -11,6 +11,22 @@ const findAndFilter = async (filters) => {
     return users;
 }
 
+const delete = async (id) => {
+    const result = await User.update({
+        deletedAt: new Date()
+    },
+        {
+            where: {
+                id: id
+            }
+        })
+
+    console.log(result)
+    
+    return result;
+}
+
 module.exports = {
-    findAndFilter
+    findAndFilter,
+    delete
 };

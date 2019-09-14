@@ -1,5 +1,4 @@
 const userService = require('../services/UserService')
-const { convertQueryParameterToJsonObject } = require('../modules')
 
 module.exports = {
     async get(req, res) {
@@ -59,9 +58,9 @@ module.exports = {
     async delete(req, res) {
         try {
             const id = req.params.id;
-            const user = await User.deleteById(id);
+            const result = await userService.delete(id);
 
-            let response = { rowsDeleted: user.nModified }
+            let response = { rowsDeleted: result.nModified }
 
             return res.status(200).json(response);
         } catch (error) {
