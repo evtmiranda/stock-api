@@ -1,4 +1,4 @@
-const userService = require('../services/UserService')
+const userService = require('../services/userService')
 
 module.exports = {
     async get(req, res) {
@@ -55,10 +55,10 @@ module.exports = {
 
     },
 
-    async delete(req, res) {
+    async remove(req, res) {
         try {
             const id = req.params.id;
-            const result = await userService.delete(id);
+            const result = await userService.remove(id);
 
             let response = { rowsDeleted: result.nModified }
 
