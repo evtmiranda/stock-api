@@ -16,38 +16,14 @@ module.exports = {
                 allowNull: false,
                 type: DataTypes.DATE,
             },
-            created_by: {
-                allowNull: false,
-                type: DataTypes.INTEGER,
-                references: {
-                    model: 'users',
-                    key: 'id',
-                },
-            },
             updated_at: {
                 allowNull: true,
                 type: DataTypes.DATE,
             },
-            updated_by: {
-                allowNull: true,
-                type: DataTypes.INTEGER,
-                references: {
-                    model: 'users',
-                    key: 'id',
-                },
-            },
             deleted_at: {
                 allowNull: true,
                 type: DataTypes.DATE,
-            },
-            deleted_by: {
-                allowNull: true,
-                type: DataTypes.INTEGER,
-                references: {
-                    model: 'users',
-                    key: 'id',
-                },
-            },
+            },            
         });
     },
 

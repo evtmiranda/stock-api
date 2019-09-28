@@ -13,26 +13,14 @@ module.exports = (sequelize, DataTypes) => {
             field: 'created_at',
             type: DataTypes.DATE,
         },
-        createdBy: {
-            field: 'created_by',
-            type: DataTypes.INTEGER
-        },
         updatedAt: {
             field: 'updated_at',
             type: DataTypes.DATE,
         },
-        updatedBy: {
-            field: 'updated_by',
-            type: DataTypes.INTEGER,
-        },
         deletedAt: {
             field: 'deleted_at',
             type: DataTypes.DATE,
-        },
-        deletedBy: {
-            field: 'deleted_by',
-            type: DataTypes.INTEGER,
-        },
+        }
     }, {
             sequelize,
             freezeTableName: true,
