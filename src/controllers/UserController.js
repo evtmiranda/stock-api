@@ -19,16 +19,18 @@ module.exports = {
 
     async create(req, res) {
         try {
-            const { name, username, password, profileId } = req.body;
+            const { name, username, password} = req.body;
 
-            const user = await User.findOrCreate({
+            const [userCreated, created] = await userService.findOrCreate({
                 name,
                 username,
-                password,
-                profileId
+                password
             });
 
-            return res.status(201).json(user);
+            if (created) {
+              return res.status(201).json(userCreated);
+            }
+            return res.status(422).json(`Já existe um usuário com este username: ${username}`)
         } catch (error) {
             return res.status(500).json({ error: "Ops! Something went wrong." })
         }

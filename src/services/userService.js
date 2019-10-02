@@ -21,12 +21,24 @@ const remove = async (id) => {
             }
         })
 
-    console.log(result)
-    
     return result;
+}
+
+const findOrCreate = async (user) => {
+    const [userCreated, created] = await User.findOrCreate({
+        where: { username: user.username },
+        defaults: {
+            username: user.username,
+            name: user.name,
+            password: user.password
+        }
+      })
+
+    return [userCreated, created]
 }
 
 module.exports = {
     findAndFilter,
-    remove
+    remove,
+    findOrCreate
 };
