@@ -30,7 +30,7 @@ module.exports = {
             if (created) {
               return res.status(201).json(userCreated);
             }
-            return res.status(422).json(`Usuário ${username} não foi criado com sucesso`)
+            return res.status(422).json(`Já existe um usuário com este username: ${username}`)
         } catch (error) {
             return res.status(500).json({ error: "Ops! Something went wrong." })
         }

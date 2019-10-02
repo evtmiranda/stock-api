@@ -21,8 +21,6 @@ const remove = async (id) => {
             }
         })
 
-    console.log(result)
-
     return result;
 }
 
@@ -36,7 +34,6 @@ const findOrCreate = async (user) => {
         }
       })
 
-    console.log(created)
     return [userCreated, created]
 }
 
