@@ -1,0 +1,34 @@
+version: "3.7"
+services:
+    stock-api:
+        build: .
+        container_name: stock-api
+        depends_on:
+            - postgres
+        restart: unless-stopped
+        logging:
+            driver: "json-file"
+            options:
+                max-size: "50m"
+                "max-file": "10"
+        ports:
+            - 3002:3002
+        environment:
+            - PORT=3002
+            - ENVIRONMENT=development
+        volumes:
+            - ./:/usr/src/app
+        tty: true
+        command: yarn start
+
+    postgres:
+        image: postgres:9.5
+        container_name: stock_postgres
+        environment:
+          - POSTGRES_DB=itiban
+          - POSTGRES_USER=itiban
+          - POSTGRES_PASSWORD=itiban
+        volumes:
+          - ./data/postgres:/var/lib/postgres
+        ports:
+          - "5432:5432"
