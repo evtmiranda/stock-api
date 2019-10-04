@@ -24,7 +24,7 @@ module.exports = {
         allowNull: false,
         type: DataTypes.INTEGER,
         references: {
-          model: 'users',
+          model: 'profiles',
           key: 'id'
         }
       },
