@@ -8,15 +8,19 @@ module.exports = (sequelize, DataTypes) => {
         },
         name: {
             field: 'name',
-            type: DataTypes.STRING,
+            type: DataTypes.STRING(50),
         },
         username: {
             field: 'username',
-            type: DataTypes.STRING,
+            type: DataTypes.STRING(30),
         },
         password: {
             field: 'password',
-            type: DataTypes.STRING,
+            type: DataTypes.STRING(8),
+        },
+        profileId: {
+            field: 'profile_id',
+            type: DataTypes.INTEGER,
         },
         createdAt: {
             field: 'created_at',
@@ -31,10 +35,14 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.DATE,
         },
     }, {
-            sequelize,
-            freezeTableName: true,
-            tableName: 'users'
-        })
+        sequelize,
+        freezeTableName: true,
+        tableName: 'users'
+    })
+
+    User.associate = function (models) {
+        User.belongsTo(models.Profile, { foreignKey: 'profileId', as: 'profile' })
+    };
 
     return User
 }
