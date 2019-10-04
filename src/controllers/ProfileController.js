@@ -3,15 +3,11 @@ const profileService = require('../services/profileService')
 module.exports = {
     async get(req, res) {
         try {
-            let query = req.query;
+            const query = req.queryString;
 
-            let users = await profileService.findAndFilter(query);
+            const profiles = await profileService.findAndFilter(query);
 
-            profiles = profiles.sort((a, b) => {
-                return b.createdAt - a.createdAt
-            });
-
-            return res.json(users);
+            return res.json(profiles);
         } catch (error) {
             return res.status(500).json({ error: error.message });
         }

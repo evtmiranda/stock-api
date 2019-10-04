@@ -3,7 +3,7 @@ const permissionService = require('../services/permissionService')
 module.exports = {
     async get(req, res) {
         try {
-            const query = req.query;
+            const query = req.queryString;
 
             const permissions = await permissionService.findAndFilter(query);
 

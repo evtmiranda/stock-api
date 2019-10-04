@@ -3,13 +3,9 @@ const userService = require('../services/userService')
 module.exports = {
     async get(req, res) {
         try {
-            let query = req.query;
+            const query = req.queryString;
 
-            let users = await userService.findAndFilter(query);
-
-            users = users.sort((a, b) => {
-                return b.createdAt - a.createdAt
-            });
+            const users = await userService.findAndFilter(query);
 
             return res.json(users);
         } catch (error) {
