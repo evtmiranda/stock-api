@@ -5,9 +5,9 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       primaryKey: true
     },
-    description: {
-      field: 'description',
-      type: DataTypes.STRING,
+    name: {
+      field: 'name',
+      type: DataTypes.STRING(50),
     },
     createdAt: {
       field: 'created_at',
@@ -24,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     freezeTableName: true,
-    tableName: 'modules'
+    tableName: 'permissions'
   })
 
   return Permission;
