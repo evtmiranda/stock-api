@@ -2,19 +2,19 @@ module.exports = {
   up: (queryInterface) => {
     return queryInterface.bulkInsert('permissions', [
       {
-        description: 'create',
+        name: 'create',
         created_at: new Date(),
       },
       {
-        description: 'delete',
+        name: 'delete',
         created_at: new Date(),
       },
       {
-        description: 'edit',
+        name: 'edit',
         created_at: new Date(),
       },
       {
-        description: 'view',
+        name: 'view',
         created_at: new Date(),
       }
     ])    
@@ -23,19 +23,19 @@ module.exports = {
   down: (queryInterface) => {
     return queryInterface.bulkDelete('permissions', [
       {
-        description: 'create',
+        name: 'create',
         created_at: new Date(),
       },
       {
-        description: 'delete',
+        name: 'delete',
         created_at: new Date(),
       },
       {
-        description: 'edit',
+        name: 'edit',
         created_at: new Date(),
       },
       {
-        description: 'view',
+        name: 'view',
         created_at: new Date(),
       }
     ])   
