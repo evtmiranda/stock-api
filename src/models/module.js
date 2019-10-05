@@ -6,8 +6,8 @@ module.exports = (sequelize, DataTypes) => {
             primaryKey: true
         },
         name: {
-            field: 'module_name',
-            type: DataTypes.STRING,
+            field: 'name',
+            type: DataTypes.STRING(50),
         },
         createdAt: {
             field: 'created_at',

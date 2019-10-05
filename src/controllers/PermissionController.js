@@ -1,13 +1,13 @@
-const moduleService = require('../services/moduleService')
+const permissionService = require('../services/permissionService')
 
 module.exports = {
     async get(req, res) {
         try {
             const query = req.queryString;
 
-            const modules = await moduleService.findAndFilter(query);
+            const permissions = await permissionService.findAndFilter(query);
 
-            return res.json(modules);
+            return res.json(permissions);
         } catch (error) {
             return res.status(500).json({ error: error.message });
         }

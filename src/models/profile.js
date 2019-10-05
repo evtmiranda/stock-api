@@ -1,13 +1,18 @@
 module.exports = (sequelize, DataTypes) => {
-  const Permission = sequelize.define('Permission', {
+  const Profile = sequelize.define('Profile', {
     id: {
       field: 'id',
       type: DataTypes.INTEGER,
-      primaryKey: true
+      primaryKey: true,
+      autoIncrement: true,
     },
     name: {
       field: 'name',
-      type: DataTypes.STRING(50),
+      type: DataTypes.STRING(30),
+    },
+    description: {
+      field: 'description',
+      type: DataTypes.STRING(100),
     },
     createdAt: {
       field: 'created_at',
@@ -15,17 +20,17 @@ module.exports = (sequelize, DataTypes) => {
     },
     updatedAt: {
       field: 'updated_at',
-      type: DataTypes.DATE
+      type: DataTypes.DATE,
     },
     deletedAt: {
       field: 'deleted_at',
-      type: DataTypes.DATE
-    },    
+      type: DataTypes.DATE,
+    },
   }, {
     sequelize,
     freezeTableName: true,
-    tableName: 'permissions'
+    tableName: 'profiles'
   })
-
-  return Permission;
+  
+  return Profile;
 };

@@ -1,15 +1,15 @@
-const moduleService = require('../services/moduleService')
+const profileService = require('../services/profileService')
 
 module.exports = {
     async get(req, res) {
         try {
             const query = req.queryString;
 
-            const modules = await moduleService.findAndFilter(query);
+            const profiles = await profileService.findAndFilter(query);
 
-            return res.json(modules);
+            return res.json(profiles);
         } catch (error) {
             return res.status(500).json({ error: error.message });
         }
-    },
+    }
 }
