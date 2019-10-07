@@ -37,8 +37,24 @@ const findOrCreate = async (user) => {
     return [userCreated, created]
 }
 
+const update = async (user) => {
+    const [numberOfAffectedRows, affectedRows] = await User.update({
+        name: user.name,
+        username: user.username,
+        password: user.password,
+        profileId: user.profileId
+    },
+        {
+            where: { id: user.id },
+            returning: true
+        })
+
+    return [numberOfAffectedRows, affectedRows];
+}
+
 module.exports = {
     findAndFilter,
     remove,
-    findOrCreate
+    findOrCreate,
+    update
 };
