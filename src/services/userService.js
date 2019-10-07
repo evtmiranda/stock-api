@@ -30,7 +30,8 @@ const findOrCreate = async (user) => {
         defaults: {
             username: user.username,
             name: user.name,
-            password: user.password
+            password: user.password,
+            profileId: user.profile_id
         }
       })
 

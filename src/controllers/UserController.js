@@ -15,12 +15,13 @@ module.exports = {
 
     async create(req, res) {
         try {
-            const { name, username, password} = req.body;
+            const { name, username, password, profile_id} = req.body;
 
             const [userCreated, created] = await userService.findOrCreate({
                 name,
                 username,
-                password
+                password,
+                profile_id
             });
 
             if (created) {
@@ -28,7 +29,7 @@ module.exports = {
             }
             return res.status(422).json(`Já existe um usuário com este username: ${username}`)
         } catch (error) {
-            return res.status(500).json({ error: "Ops! Something went wrong." })
+            return res.status(500).json({ error: error.message })
         }
     },
 
