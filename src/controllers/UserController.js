@@ -15,13 +15,13 @@ module.exports = {
 
     async create(req, res) {
         try {
-            const { name, username, password, profile_id } = req.body;
+            const { name, username, password, profileId } = req.body;
 
             const [userCreated, created] = await userService.findOrCreate({
                 name,
                 username,
                 password,
-                profile_id
+                profileId
             });
 
             if (created) {
@@ -38,18 +38,20 @@ module.exports = {
             const id = req.params.id;
             const { name, username, password, profileId } = req.body;
 
-            const user = await User.updateOne({ _id: id }, {
+            const [numberOfAffectedRows, affectedRows] = await userService.update({
+                id,
                 name,
                 username,
                 password,
                 profileId
             });
 
-            let response = { rowsUpdated: user.nModified }
-
-            return res.status(200).json(response);
+            if (numberOfAffectedRows){
+                return res.status(201).json(affectedRows);
+            }
+            return res.status(422).json(`Não existe um usuário com este id: ${id}`)
         } catch (error) {
-            return res.status(500).json({ error: "Ops! Something went wrong." })
+            return res.status(500).json({ error: error.message })
         }
 
     },
