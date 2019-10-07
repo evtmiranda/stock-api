@@ -15,13 +15,13 @@ module.exports = {
 
     async create(req, res) {
         try {
-            const { name, username, password, profile_id} = req.body;
+            const { name, username, password, profileId} = req.body;
 
             const [userCreated, created] = await userService.findOrCreate({
                 name,
                 username,
                 password,
-                profile_id
+                profileId
             });
 
             if (created) {

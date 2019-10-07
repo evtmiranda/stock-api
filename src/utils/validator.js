@@ -1,11 +1,16 @@
 const { body, validationResult } = require('express-validator')
 
-const createUserValidationRules = () => {
+const userValidationRules = () => {
   return [
-    body('name').isAlpha().isLength({ min: 3, max: 50}).withMessage('Name must contain only characters, minimum: 3, maximum: 50'),
+    // body('name').toString.split(' ').every(function (word) { return isAlpha(word, ['pt-BR']).withMessage('Name must contain only characters, minimum: 3, maximum: 50'); }),
+    // body('name').split(' ').every(function (word) { return isAlpha(['pt-BR']).isLength({ min: 3, max: 50}).withMessage('Name must contain only characters, minimum: 3, maximum: 50')); }
+    body('name').trim().isAlpha(['pt-BR']).withMessage('Name must contain only characters'),
+    body('name').trim().escape().isLength({ min: 3, max: 50}).withMessage('Name must contain only characters, minimum: 3, maximum: 50'),
+    // body('name').whitelist('^[a-zA-Z]+(\s[a-zA-Z]+)?$').isLength({ min: 3, max: 50}).withMessage('Name must contain only characters, minimum: 3, maximum: 50'),
+
     body('username').isAlpha().isLength({ min: 3, max: 50}).withMessage('Username must contain only characters, minimum: 3 maximum: 50'),
     body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters.'),
-    body('profile_id').isInt().withMessage('Profile Id must contain only integer numbers.'),
+    body('profileId').isInt().withMessage('Profile Id must contain only integer numbers.'),
   ]
 }
 
@@ -23,6 +28,6 @@ const validate = (req, res, next) => {
 }
 
 module.exports = {
-  createUserValidationRules,
+  userValidationRules,
   validate,
 }
