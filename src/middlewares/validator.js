@@ -2,8 +2,9 @@ const { body, validationResult } = require('express-validator')
 
 const userValidationRules = () => {
   return [
-    body('name').isAlpha().isLength({ min: 3, max: 50}).withMessage('O campo name deve possuir apenas letras, mínimo: 3, máximo: 50'),
-    body('username').isAlpha().isLength({ min: 3, max: 50}).withMessage('O campo username deve possuir apenas letras, mínimo: 3 máximo: 50'),
+    body('name').matches('^[a-zA-Z_]+( [a-zA-Z_]+)*$').withMessage('O campo name deve possuir apenas letras.'),
+    body('username').isAlpha().withMessage('O campo username deve possuir apenas letras.'),
+    body('username').isLength({ min: 3, max: 50}).withMessage('O campo name deve possuir no mínimo 3 caracteres e no máximo 50 caracteres.'),
     body('password').isLength({ min: 6 }).withMessage('O campo password deve conter pelo menos seis caracteres.'),
     body('profileId').isInt().withMessage('O campo ProfileId deve possuir apenas valores númericos inteiros.'),
   ]
