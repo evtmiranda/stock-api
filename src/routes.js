@@ -1,5 +1,5 @@
 const express = require('express');
-const { createUserValidationRules, validate } = require('./utils/validator.js')
+const { createUserValidationRules, validate } = require('./middlewares/validator.js/index.js')
 const routes = express.Router();
 
 const UserController = require('./controllers/UserController');
