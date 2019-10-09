@@ -6,6 +6,7 @@ const UserController = require('./controllers/UserController');
 const ModuleController = require('./controllers/ModuleController');
 const PermissionController = require('./controllers/PermissionController');
 const ProfileController = require('./controllers/ProfileController');
+const WebGatewayController = require('./controllers/WebGatewayController');
 
 routes.get('/users', UserController.get)
 routes.post('/users', userValidationRules(), validate, UserController.create)
@@ -17,5 +18,7 @@ routes.get('/profiles', ProfileController.get)
 routes.get('/modules', ModuleController.get)
 
 routes.get('/permissions', PermissionController.get)
+
+routes.get('/web/getPermissions', WebGatewayController.getPermissions)
 
 module.exports = routes;
