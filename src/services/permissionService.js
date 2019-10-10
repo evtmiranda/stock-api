@@ -8,12 +8,20 @@ const findAndFilter = async (filters) => {
     return permissions;
 }
 
+const findOne = async (filters) => {
+    const permission = await Permission.findOne({
+        where: filters
+    })
+
+    return permission;
+}
+
 const findByName = async name => {
     const filter = {
         name: name
     }
 
-    const permission = await this.findAndFilter(filter);
+    const permission = await findOne(filter);
 
     return permission;
 }
@@ -51,6 +59,7 @@ const translatePermissions = (name, ptToEn = false) => {
 
 module.exports = {
     findAndFilter,
+    findOne,
     translatePermissions,
     findByName
 };

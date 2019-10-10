@@ -8,12 +8,20 @@ const findAndFilter = async (filters) => {
     return modules;
 }
 
+const findOne = async (filters) => {
+    const module = await Module.findOne({
+        where: filters,
+    })
+
+    return module;
+}
+
 const findByName = async name => {
     const filter = {
         name: name
     }
 
-    const module = await this.findAndFilter(filter);
+    const module = await findOne(filter);
 
     return module;
 }
@@ -55,6 +63,7 @@ const translateModules = (name, ptToEn = false) => {
 
 module.exports = {
     findAndFilter,
+    findOne,
     translateModules,
     findByName
 };

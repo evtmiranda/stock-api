@@ -27,12 +27,12 @@ const findOrCreate = async (profile) => {
 }
 
 const create = async (profile) => {
-    const [profileCreated, created] = await this.findOrCreate(profile);
+    const [profileCreated, created] = await findOrCreate(profile);
 
     if(created){
-        const permissionProfiles = permissionProfileService.createPermissionProfilesObjectByModuleAndPermissionsName(profile.permissions);
+        const permissionProfiles = await permissionProfileService.createPermissionProfilesObjectByModuleAndPermissionsName(profile.permissions, profileCreated.id);
 
-        await permissionProfileService.create(permissionProfiles);
+        await permissionProfileService.bulkCreate(permissionProfiles);
     }
 
     return [profileCreated, created]
