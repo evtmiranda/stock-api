@@ -31,5 +31,18 @@ module.exports = {
         } catch (error) {
             return res.status(500).json({ error: error.message })
         }
+    },
+
+    async remove(req, res) {
+        try {
+            const id = req.params.id;
+            const result = await profileService.remove(id);
+
+            let response = { rowsDeleted: result.nModified }
+
+            return res.status(200).json(response);
+        } catch (error) {
+            return res.status(500).json({ error: error.message })
+        }
     }
 }

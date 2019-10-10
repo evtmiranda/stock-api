@@ -16,6 +16,7 @@ routes.put('/users/:id', userValidationRules(), validate, UserController.update)
 
 routes.get('/profiles', ProfileController.get)
 routes.post('/profiles', ProfileController.create)
+routes.delete('/profiles/:id', ProfileController.remove)
 
 routes.get('/modules', ModuleController.get)
 
