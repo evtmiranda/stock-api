@@ -14,27 +14,49 @@ const findAndFilter = async (filters) => {
     return permissionProfiles;
 }
 
-const create = permissionProfiles => {
-    const permissionProfile = PermissionProfile.create(permissionProfiles);
+const findOrCreate = async (permissionProfile) => {
+    const [permissionProfileCreated, created] = await PermissionProfile.findOrCreate({
+        where: {
+            permissionId: permissionProfile.permissionId,
+            moduleId: permissionProfile.moduleId,
+            profileId: permissionProfile.profileId,
+        },
+        defaults: {
+            permissionId: permissionProfile.permissionId,
+            moduleId: permissionProfile.moduleId,
+            profileId: permissionProfile.profileId,
+        }
+    })
 
-    return permissionProfile;
+    return [permissionProfileCreated, created]
 }
 
-const createPermissionProfilesObjectByModuleAndPermissionsName = (permissions, profileId) => {
-    permissions = ['Estoque|Visualizar']
-    permissionProfileObjectArray = []
+const bulkCreate = async permissionProfiles => {
+    for (const permissionProfile of permissionProfiles) {
+        await findOrCreate(permissionProfile)
+    }
+}
 
-    permissionsSplit = permissions.split('|')
+const createPermissionProfilesObjectByModuleAndPermissionsName = async (permissionProfiles, profileId) => {
+    let permissionProfileObjectArray = []
+    let permissionProfileSplit = []
 
-    for (const permissionSplit of permissionsSplit) {
-        permissionProfiles = [
-            moduleService.translateModules(permissionSplit[0]),
-            permissionService.translatePermissions(permissionSplit[1])
+    let permissionProfileObject = {}
+
+    for (const permissionProfile of permissionProfiles) {
+        permissionProfileSplit = permissionProfile.split('|')
+
+        permissionProfilesTranslated = [
+            moduleService.translateModules(permissionProfileSplit[0], true),
+            permissionService.translatePermissions(permissionProfileSplit[1], true)
         ];
 
-        let permissionProfileObject = {
-            permissionId: permissionService.findByName(permissionProfiles[1].id),
-            moduleId: moduleService.findByName(permissionProfiles[0].id),
+        const permission = await permissionService.findByName(permissionProfilesTranslated[1]);
+        const module = await moduleService.findByName(permissionProfilesTranslated[0]);
+
+        permissionProfileObject = {
+            permissionId: permission.id,
+            moduleId: module.id,
             profileId: profileId
         }
 
@@ -51,7 +73,8 @@ const createObjectmodulesAndPermissionsName = function (moduleName, permissionsN
 
 module.exports = {
     findAndFilter,
-    create,
+    findOrCreate,
+    bulkCreate,
     createPermissionProfilesObjectByModuleAndPermissionsName,
     createObjectmodulesAndPermissionsName
 }

@@ -27,7 +27,7 @@ module.exports = {
               return res.status(201).json(profileCreated);
             }
             
-            return res.status(422).json(`Já existe um perfil com este nome: ${username}`)
+            return res.status(422).json(`Já existe um perfil com este nome: ${name}`)
         } catch (error) {
             return res.status(500).json({ error: error.message })
         }
