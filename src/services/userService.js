@@ -11,6 +11,51 @@ const findAndFilter = async (filters) => {
     return users;
 }
 
+const remove = async (id) => {
+    const result = await User.update({
+        deletedAt: new Date()
+    },
+        {
+            where: {
+                id: id
+            }
+        })
+
+    return result;
+}
+
+const findOrCreate = async (user) => {
+    const [userCreated, created] = await User.findOrCreate({
+        where: { username: user.username },
+        defaults: {
+            username: user.username,
+            name: user.name,
+            password: user.password,
+            profileId: user.profileId
+        }
+      })
+
+    return [userCreated, created]
+}
+
+const update = async (user) => {
+    const [numberOfAffectedRows, affectedRows] = await User.update({
+        name: user.name,
+        username: user.username,
+        password: user.password,
+        profileId: user.profileId
+    },
+        {
+            where: { id: user.id },
+            returning: true
+        })
+
+    return [numberOfAffectedRows, affectedRows];
+}
+
 module.exports = {
-    findAndFilter
+    findAndFilter,
+    remove,
+    findOrCreate,
+    update
 };
