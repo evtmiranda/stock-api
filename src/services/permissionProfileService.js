@@ -20,6 +20,7 @@ const findOrCreate = async (permissionProfile) => {
             permissionId: permissionProfile.permissionId,
             moduleId: permissionProfile.moduleId,
             profileId: permissionProfile.profileId,
+            deletedAt: null
         },
         defaults: {
             permissionId: permissionProfile.permissionId,

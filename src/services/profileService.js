@@ -15,7 +15,10 @@ const findAndFilter = async (filters) => {
 
 const findOrCreate = async (profile) => {
     const [profileCreated, created] = await Profile.findOrCreate({
-        where: { name: profile.name },
+        where: { 
+            name: profile.name,
+            deletedAt: null
+         },
         defaults: {
             name: profile.name,
             description: profile.description,
@@ -38,8 +41,22 @@ const create = async (profile) => {
     return [profileCreated, created]
 }
 
+const remove = async (id) => {
+    const result = await Profile.update({
+        deletedAt: new Date()
+    },
+        {
+            where: {
+                id: id
+            }
+        })
+
+    return result;
+}
+
 module.exports = {
     findAndFilter,
     findOrCreate,
-    create
+    create,
+    remove
 };
