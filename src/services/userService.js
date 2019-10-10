@@ -26,14 +26,17 @@ const remove = async (id) => {
 
 const findOrCreate = async (user) => {
     const [userCreated, created] = await User.findOrCreate({
-        where: { username: user.username },
+        where: {
+            username: user.username,
+            deletedAt: null
+        },
         defaults: {
             username: user.username,
             name: user.name,
             password: user.password,
             profileId: user.profileId
         }
-      })
+    })
 
     return [userCreated, created]
 }
