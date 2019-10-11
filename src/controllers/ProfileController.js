@@ -24,9 +24,9 @@ module.exports = {
             });
 
             if (created) {
-              return res.status(201).json(profileCreated);
+                return res.status(201).json(profileCreated);
             }
-            
+
             return res.status(422).json(`Já existe um perfil com este nome: ${name}`)
         } catch (error) {
             return res.status(500).json({ error: error.message })
@@ -44,5 +44,27 @@ module.exports = {
         } catch (error) {
             return res.status(500).json({ error: error.message })
         }
+    },
+
+    async update(req, res) {
+        try {
+            const id = req.params.id;
+            const { name, description, permissions } = req.body;
+
+            const [numberOfAffectedRows, affectedRows] = await profileService.update({
+                id,
+                name,
+                description,
+                permissions
+            });
+
+            if (numberOfAffectedRows) {
+                return res.status(201).json(affectedRows);
+            }
+            return res.status(422).json(`Não existe um perfil com este id: ${id}`)
+        } catch (error) {
+            return res.status(500).json({ error: error.message })
+        }
+
     }
 }

@@ -1,6 +1,7 @@
 const moduleService = require('./moduleService')
 const permissionService = require('./permissionService')
 const permissionProfileService = require('./permissionProfileService')
+const profileService = require('./profileService')
 const convertArrayToJson = require('../utils/convertArrayToJson')
 
 const getPermissions = async () => {
@@ -18,6 +19,42 @@ const getPermissions = async () => {
     return convertArrayToJson(modulesAndPermissionsName);
 }
 
+const getProfileAndPermissions = async () => {
+    const query = { "deleted_at": null };
+    let permission = [];
+    let module = [];
+    let modulesAndPermissionsName = [];
+    let profileAndPermissions = [];
+    let profilesAndPermissions = [];
+
+    const profiles = await profileService.findAndFilter(query);
+
+    for (const profile of profiles) {
+        const profileId = profile.id;
+        const permissionsProfile = await permissionProfileService.findAndFilter({ profileId });
+
+        for (const permissionProfile of permissionsProfile) {
+            permission = await permissionService.findOne({ id: permissionProfile.permissionId });
+            module = await moduleService.findOne({ id: permissionProfile.moduleId });
+
+            modulesAndPermissionsName.push(moduleService.translateModules(module.name) + "|" + permissionService.translatePermissions(permission.name))
+        }
+
+        profileAndPermissions = {
+            id: profile.id,
+            name: profile.name,
+            description: profile.description,
+            permissions: modulesAndPermissionsName
+        }
+
+        profilesAndPermissions.push(profileAndPermissions)
+
+        modulesAndPermissionsName = []
+    }
+
+    return profilesAndPermissions;
+}
+
 const filterPermissions = modulesAndPermissionsName => {
     modulesAndPermissionsName.map(p => {
         if (p.moduleName === "Tela Inicial" || p.moduleName === "Relatórios") {
@@ -27,7 +64,8 @@ const filterPermissions = modulesAndPermissionsName => {
 }
 
 module.exports = {
-    getPermissions
+    getPermissions,
+    getProfileAndPermissions
 };
 
 
