@@ -17,6 +17,7 @@ routes.put('/users/:id', userValidationRules(), validate, UserController.update)
 routes.get('/profiles', ProfileController.get)
 routes.post('/profiles', ProfileController.create)
 routes.delete('/profiles/:id', ProfileController.remove)
+routes.put('/profiles/:id', ProfileController.update)
 
 routes.get('/modules', ModuleController.get)
 
@@ -25,5 +26,6 @@ routes.get('/permissions', PermissionController.get)
 routes.get('/permissionProfiles', PermissionProfileController.get)
 
 routes.get('/web/getPermissions', WebGatewayController.getPermissions)
+routes.get('/web/getProfilesAndPermissions', WebGatewayController.getProfilesAndPermissions)
 
 module.exports = routes;

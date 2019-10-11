@@ -2,6 +2,7 @@ const { PermissionProfile } = require('../models')
 const convertArrayToJson = require('../utils/convertArrayToJson')
 const moduleService = require('../services/moduleService')
 const permissionService = require('../services/permissionService')
+const Sequelize = require('sequelize')
 
 const findAndFilter = async (filters) => {
     const permissionProfiles = await PermissionProfile.findAll({
@@ -36,6 +37,19 @@ const bulkCreate = async permissionProfiles => {
     for (const permissionProfile of permissionProfiles) {
         await findOrCreate(permissionProfile)
     }
+}
+
+const bulkDelete = async profileId => {
+    const result = await PermissionProfile.update({
+        deletedAt: new Date()
+    },
+        {
+            where: {
+                profileId
+            }
+        })
+
+    return result;
 }
 
 const createPermissionProfilesObjectByModuleAndPermissionsName = async (permissionProfiles, profileId) => {
@@ -76,6 +90,7 @@ module.exports = {
     findAndFilter,
     findOrCreate,
     bulkCreate,
+    bulkDelete,
     createPermissionProfilesObjectByModuleAndPermissionsName,
     createObjectmodulesAndPermissionsName
 }
