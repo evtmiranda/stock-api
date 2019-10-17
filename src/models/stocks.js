@@ -1,6 +1,6 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-  const stock = sequelize.define('Stock', {
+  const Stock = sequelize.define('Stock', {
     id: {
       field: 'id',
       type: DataTypes.INTEGER,
