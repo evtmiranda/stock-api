@@ -9,14 +9,14 @@ module.exports = {
       },
       stock_id: {
         allowNull: false,
-        type: DataTypes.INTEGER,
+        type: Sequelize.INTEGER,
         references: {
           model: 'stocks',
           key: 'id'
         }
       },
       status_id: {
-        type: DataTypes.INTEGER,
+        type: Sequelize.INTEGER,
         references: {
           model: 'status',
           key: 'id'
@@ -32,7 +32,7 @@ module.exports = {
       }
     });
   },
-  down: (queryInterface, Sequelize) => {
+  down: (queryInterface) => {
     return queryInterface.dropTable('stock_status');
   }
 };

@@ -1,5 +1,5 @@
 module.exports = {
-  up: (queryInterface, Sequelize) => {
+  up: (queryInterface, DataTypes) => {
     return queryInterface.createTable('stocks', {
       id: {
         allowNull: false,
@@ -69,7 +69,7 @@ module.exports = {
       }      
     });
   },
-  down: (queryInterface, Sequelize) => {
+  down: (queryInterface) => {
     return queryInterface.dropTable('stocks');
   }
 };
