@@ -8,6 +8,20 @@ const findAndFilter = async (filters) => {
     return stocks;
 }
 
+const remove = async (id) => {
+    const result = await Stock.update({
+        deletedAt: new Date()
+    },
+        {
+            where: {
+                id: id
+            }
+        })
+
+    return result;
+}
+
 module.exports = {
     findAndFilter,
+    remove
 };
