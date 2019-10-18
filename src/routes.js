@@ -31,5 +31,6 @@ routes.get('/web/getProfilesAndPermissions', WebGatewayController.getProfilesAnd
 
 routes.get('/stocks', StockController.get)
 routes.delete('/stocks/:id', StockController.remove)
+routes.put('/stocks/:id', StockController.update)
 
 module.exports = routes;
