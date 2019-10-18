@@ -21,7 +21,30 @@ const remove = async (id) => {
     return result;
 }
 
+const update = async (stock) => {
+    const [numberOfAffectedRows, affectedRows] = await Stock.update({
+        lot: stock.lot,
+        description: stock.description,
+        refenrece: stock.reference, 
+        quantity: stock.quantity, 
+        tag: stock.tag, 
+        store: stock.store, 
+        unitValue: stock.unitValue, 
+        outputDate: stock.outputDate, 
+        outputQuantity: stock.outputQuantity, 
+        updatedAt: new Date()
+    },
+        {
+            where: { id: stock.id },
+            returning: true
+        })
+
+    return [numberOfAffectedRows, affectedRows];
+}
+
+
 module.exports = {
     findAndFilter,
-    remove
+    remove,
+    update
 };
