@@ -8,6 +8,7 @@ const PermissionController = require('./controllers/PermissionController');
 const ProfileController = require('./controllers/ProfileController');
 const PermissionProfileController = require('./controllers/PermissionProfileController');
 const WebGatewayController = require('./controllers/WebGatewayController');
+const StockController = require('./controllers/StockController');
 
 routes.get('/users', UserController.get)
 routes.post('/users', userValidationRules(), validate, UserController.create)
@@ -27,5 +28,8 @@ routes.get('/permissionProfiles', PermissionProfileController.get)
 
 routes.get('/web/getPermissions', WebGatewayController.getPermissions)
 routes.get('/web/getProfilesAndPermissions', WebGatewayController.getProfilesAndPermissions)
+
+routes.get('/stocks', StockController.get)
+routes.delete('/stocks/:id', StockController.remove)
 
 module.exports = routes;
