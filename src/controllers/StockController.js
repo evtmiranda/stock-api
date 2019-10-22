@@ -1,6 +1,16 @@
 const stockService = require('../services/stockService')
 
 module.exports = {
+    async post(req, res) {
+        try {
+            const stock = await stockService.create(req.body)
+
+            return res.json(stock)
+        } catch (error) {
+            return res.status(500).json({ error: error.message })
+        }
+    },
+
     async get(req, res) {
         try {
             const query = req.queryString;

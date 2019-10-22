@@ -69,7 +69,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     freezeTableName: true,
-    tableName: 'stock'
+    tableName: 'stocks'
   });
   
   return Stock;

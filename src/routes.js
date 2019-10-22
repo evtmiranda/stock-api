@@ -1,5 +1,5 @@
 const express = require('express');
-const { userValidationRules, validate } = require('./middlewares/validator.js')
+const { userValidationRules, stockValidationRules, validate } = require('./middlewares/validator.js')
 const routes = express.Router();
 
 const UserController = require('./controllers/UserController');
@@ -30,6 +30,7 @@ routes.get('/web/getPermissions', WebGatewayController.getPermissions)
 routes.get('/web/getProfilesAndPermissions', WebGatewayController.getProfilesAndPermissions)
 
 routes.get('/stocks', StockController.get)
+routes.post('/stocks', stockValidationRules(), validate, StockController.post)
 routes.delete('/stocks/:id', StockController.remove)
 routes.put('/stocks/:id', StockController.update)
 
