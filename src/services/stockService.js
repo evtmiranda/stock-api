@@ -1,11 +1,24 @@
 const { Stock } = require('../models')
+const Serializer  = require('../serializer/stock')
+
+const create = async (params) => {
+    params.entryDate = params.entry.date
+    params.outputDate = params.output.date
+    params.outputQuantity = params.output.quantity
+    params.paymentDate = params.payment.date
+    params.paymentAmount = params.payment.amount
+
+    const stock = await Stock.create(params)
+
+    return Serializer.serialize(stock) 
+}
 
 const findAndFilter = async (filters) => {
     const stocks = await Stock.findAll({
         where: filters,
     })
 
-    return stocks;
+    return stocks.map((stock) => { return Serializer.serialize(stock) })
 }
 
 const remove = async (id) => {
@@ -46,5 +59,6 @@ const update = async (stock) => {
 module.exports = {
     findAndFilter,
     remove,
-    update
+    update,
+    create
 };
