@@ -9,7 +9,7 @@ module.exports = {
         reference: '1266f',
         quantity: 100,
         entry_date: new Date(),
-        tag: true,
+        tag: 'OK',
         store: 'Besni',
         unit_value: 1.1,
         output_date: new Date(),

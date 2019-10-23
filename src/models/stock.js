@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     tag: {
       field: 'tag',
-      type: DataTypes.BOOLEAN,
+      type: DataTypes.STRING(30),
     },
     store: {
       field: 'store',

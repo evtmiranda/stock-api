@@ -29,7 +29,7 @@ module.exports = {
       },
       tag: {
         allowNull: false,
-        type: DataTypes.BOOLEAN,
+        type: DataTypes.STRING(30),
       },
       store: {
         allowNull: false,
