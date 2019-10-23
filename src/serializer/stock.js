@@ -5,7 +5,7 @@ const serialize = (entity) => {
         description: entity.description,
         reference: entity.reference,
         quantity: entity.quantity,
-        tag: entity.tag ? "Ok" : "",
+        tag: entity.tag,
         store: entity.store,
         unitValue: entity.unitValue,
         entry: {
