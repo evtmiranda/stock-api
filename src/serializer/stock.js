@@ -5,9 +5,9 @@ const serialize = (entity) => {
         description: entity.description,
         reference: entity.reference,
         quantity: entity.quantity,
-        tag: entity.tag,
+        tag: entity.tag ? "Ok" : "",
         store: entity.store,
-        unit_value: entity.unitValue,
+        unitValue: entity.unitValue,
         entry: {
             date: entity.entryDate
         },
@@ -19,9 +19,9 @@ const serialize = (entity) => {
             date: entity.paymentDate,
             amount: entity.paymentAmount
         },
-        updated_at: entity.updatedAt,
-        created_at: entity.createdAt,
-        deleted_at: entity.deletedAt
+        updatedAt: entity.updatedAt,
+        createdAt: entity.createdAt,
+        deletedAt: entity.deletedAt
     }
 }
 
