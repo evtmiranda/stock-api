@@ -5,7 +5,7 @@ module.exports = {
         try {
             const stock = await stockService.create(req.body)
 
-            return res.json(stock)
+            return res.status(201).json(stock)
         } catch (error) {
             return res.status(500).json({ error: error.message })
         }
@@ -17,7 +17,7 @@ module.exports = {
 
             const stocks = await stockService.findAndFilter(query);
 
-            return res.json(stocks);
+            return res.status(200).json(stocks);
         } catch (error) {
             return res.status(500).json({ error: error.message });
         }
@@ -54,7 +54,7 @@ module.exports = {
             });
 
             if (numberOfAffectedRows){
-                return res.status(201).json(affectedRows);
+                return res.status(200).json(affectedRows);
             }
             return res.status(422).json(`Não existe um estoque com este id: ${id}`)
         } catch (error) {
