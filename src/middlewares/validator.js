@@ -10,6 +10,19 @@ const userValidationRules = () => {
   ]
 }
 
+const stockValidationRules = () => {
+  return [
+    body('lot').not().isEmpty().withMessage('O campo lot é obrigatório.'),
+    body('description').not().isEmpty().withMessage('O campo description é obrigatório.'),
+    body('reference').not().isEmpty().withMessage('O campo reference é obrigatório.'),
+    body('quantity').not().isEmpty().withMessage('O campo quantity é obrigatório.'),
+    body('tag').not().isEmpty().withMessage('O campo tag é obrigatório.'),
+    body('store').not().isEmpty().withMessage('O campo store é obrigatório.'),
+    body('unitValue').not().isEmpty().withMessage('O campo unitValue é obrigatório.'),
+    body('entry.date').not().isEmpty().withMessage('O campo entry.date é obrigatório.'),
+  ]
+}
+
 const validate = (req, res, next) => {
   const errors = validationResult(req)
   if (errors.isEmpty()) {
@@ -24,6 +37,7 @@ const validate = (req, res, next) => {
 }
 
 module.exports = {
+  stockValidationRules,
   userValidationRules,
   validate,
 }
