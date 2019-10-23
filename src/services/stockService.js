@@ -3,10 +3,6 @@ const Serializer  = require('../serializer/stock')
 
 const create = async (params) => {
     params.entryDate = params.entry.date
-    params.outputDate = params.output.date
-    params.outputQuantity = params.output.quantity
-    params.paymentDate = params.payment.date
-    params.paymentAmount = params.payment.amount
 
     const stock = await Stock.create(params)
 
