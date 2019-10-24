@@ -20,7 +20,7 @@ const getPermissions = async () => {
 }
 
 const getProfileAndPermissions = async () => {
-    const query = { "deleted_at": null };
+    const query = { deletedAt: null };
     let permission = [];
     let module = [];
     let modulesAndPermissionsName = [];
@@ -31,7 +31,7 @@ const getProfileAndPermissions = async () => {
 
     for (const profile of profiles) {
         const profileId = profile.id;
-        const permissionsProfile = await permissionProfileService.findAndFilter({ profileId });
+        const permissionsProfile = await permissionProfileService.findAndFilter({ deletedAt: null, profileId: profileId });
 
         for (const permissionProfile of permissionsProfile) {
             permission = await permissionService.findOne({ id: permissionProfile.permissionId });
