@@ -1,9 +1,10 @@
 const reportService = require('../services/reportService')
 
 module.exports = {
-    async get(_req, res) {
+    async get(req, res) {
         try {
-            const report = await reportService.findAll();
+            const filters = req.query;
+            const report = await reportService.getReport(filters);
 
             return res.json(report);
         } catch (error) {
