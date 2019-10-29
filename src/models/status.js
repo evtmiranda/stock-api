@@ -18,10 +18,10 @@ module.exports = (sequelize, DataTypes) => {
       field: 'updated_at',
       type: DataTypes.DATE,
     },
-    deletedAt: {
-      field: 'deleted_at',
-      type: DataTypes.DATE,
-    },    
+    deletedAt: {  
+      field: 'deleted_at',  
+      type: DataTypes.DATE, 
+    }
   }, {
     sequelize,
     freezeTableName: true,
