@@ -21,19 +21,16 @@ module.exports = (sequelize, DataTypes) => {
     updatedAt: {
       field: 'updated_at',
       type: DataTypes.DATE,
-    },
-    deletedAt: {
-      field: 'deleted_at',
-      type: DataTypes.DATE,
-    },
+    }
   }, {
     sequelize,
     freezeTableName: true,
     tableName: 'stock_status'
   });
+  
   StockStatus.associate = function(models) {
     StockStatus.belongsTo(models.Stock, { foreignKey: 'stockId', as: 'stocks' });
-    StockStatus.belongsTo(models.Stock, { foreignKey: 'statusId', as: 'status' });    
+    StockStatus.belongsTo(models.Status, { foreignKey: 'statusId', as: 'status' });    
   };
 
   return StockStatus;
