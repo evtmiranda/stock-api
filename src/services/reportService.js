@@ -4,6 +4,25 @@ const Sequelize = require('sequelize')
 const moment = require('moment')
 const Op = Sequelize.Op
 
+const findAll = async () => {
+    const today = new Date();
+    const currentDay = today.getDate() - 1;
+    const firstDay = new Date(today.getTime() + 24 * 60 * 60 * 1000 * - currentDay);
+
+    const report = await Stock.findAll({
+        attributes: [
+            'created_at',
+            [sequelize.fn('COUNT', sequelize.col('quantity')), 'qtd_entrada'],
+            [sequelize.fn('COUNT', sequelize.col('output_quantity')), 'qtd_saida']
+        ],
+        where: {
+            [Op.between]: [firstDay, today],
+        }
+    })
+
+    return report;
+}
+
 const getReport = async (filters) => {
     const from = filters.from ? moment(filters.from).toDate() : '2019-01-01'
     const to = filters.to ? moment(filters.to).toDate() : moment().toDate()
@@ -53,5 +72,6 @@ const getReport = async (filters) => {
 }
 
 module.exports = {
+    findAll,
     getReport
 }
