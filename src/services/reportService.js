@@ -2,6 +2,7 @@ const { Stock, Status, StockStatus } = require('../models')
 const Serializer  = require('../serializer/stock')
 const Sequelize = require('sequelize')
 const moment = require('moment')
+const fs = require('fs')
 const Op = Sequelize.Op
 
 const findAll = async () => {
@@ -23,12 +24,9 @@ const findAll = async () => {
     return report;
 }
 
-const getReport = async (filters) => {
+const getByFilters = async(filters) => {
     const from = filters.from ? moment(filters.from).toDate() : '2019-01-01'
     const to = filters.to ? moment(filters.to).toDate() : moment().toDate()
-
-    console.log(from)
-    console.log(to)
 
     const betweenDates = {
         created_at: {
@@ -63,19 +61,38 @@ const getReport = async (filters) => {
         })
 
         const stocks = stockStatuses.map((stockStatus) => { return stockStatus.stocks })
-        const formatted = stocks.map((stock) => { return Serializer.serialize(stock) })
-
-        return formatted
+        return stocks
     }
 
     const stocks = await Stock.findAll({
         where: betweenDates,
     })
 
-    return stocks.map((stock) => { return Serializer.serialize(stock) })
+    return stocks
+}
+
+const getReport = async (filters) => {
+    const stocks = await getByFilters(filters)
+
+    return stocks.map((stock) => { return Serializer.serialize(stock) }) 
+}
+
+const generateSpreadsheet = async (filters) => {
+    const stocks = await getByFilters(filters)
+
+    const headers = Object.keys(stocks[0].dataValues).join(',') + '\n'
+    const body = stocks.map((stock) => { return Object.values(stock.dataValues).join(',') })
+    const csv = headers + body
+
+    const path = "/tmp/report-" + Date.now() + ".csv"
+
+    fs.writeFile(path, csv, function (error) {console.log(error)})
+
+    return {"path": path}
 }
 
 module.exports = {
     findAll,
-    getReport
+    getReport,
+    generateSpreadsheet
 }

@@ -37,6 +37,7 @@ routes.delete('/stocks/:id', StockController.remove)
 routes.put('/stocks/:id', StockController.update)
 
 routes.get('/report', ReportController.get)
+routes.get('/report/download', ReportController.getReport)
 
 routes.get('/status', StatusController.get)
 routes.post('/status', StatusController.post)
