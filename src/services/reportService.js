@@ -53,7 +53,11 @@ const getReport = async (filters) => {
                 {
                     model: Stock,
                     as: 'stocks',
-                    where: betweenDates
+                    where: betweenDates,
+                    include:[{
+                        model: Status,
+                        as: 'status'
+                    }]
                 }
             ]
         })
