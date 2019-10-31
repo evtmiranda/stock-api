@@ -1,12 +1,22 @@
-const { User } = require('../models')
+const { User, Profile,PermissionProfile } = require('../models')
 
 const findAndFilter = async (filters) => {
     const users = await User.findAll({
         where: filters,
-        order: [
-            ['id', 'DESC']
+        include: [
+            {
+                model: Profile,
+                as: 'profile',
+                include: [
+                    {
+                        model: PermissionProfile,
+                        as: 'permissions'
+                    }
+                ]
+            }
         ]
     })
+
 
     return users;
 }
