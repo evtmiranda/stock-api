@@ -1,4 +1,4 @@
-const { User, Profile,PermissionProfile } = require('../models')
+const { User, Profile, PermissionProfile } = require('../models')
 
 const findAndFilter = async (filters) => {
     const users = await User.findAll({
@@ -10,7 +10,8 @@ const findAndFilter = async (filters) => {
                 include: [
                     {
                         model: PermissionProfile,
-                        as: 'permissions'
+                        as: 'permissions',
+                        where: { deletedAt: null }
                     }
                 ]
             }
