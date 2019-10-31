@@ -43,30 +43,23 @@ module.exports = {
         }
     },
 
-    // async update(req, res) {
-    //     try {
-    //         const id = req.params.id;
-    //         const { lot, description, reference, quantity, tag, store, unitValue, outputDate, outputQuantity } = req.body;
+    async update(req, res) {
+        try {
+            const id = req.params.id;
+            const { description } = req.body;
 
-    //         const [numberOfAffectedRows, affectedRows] = await stockService.update({
-    //             lot,
-    //             description,
-    //             reference, 
-    //             quantity, 
-    //             tag, 
-    //             store, 
-    //             unitValue, 
-    //             outputDate, 
-    //             outputQuantity, 
-    //         });
+            const [numberOfAffectedRows, affectedRows] = await statusService.update({
+                id,
+                description
+            });
 
-    //         if (numberOfAffectedRows){
-    //             return res.status(200).json(affectedRows);
-    //         }
-    //         return res.status(422).json(`Não existe um estoque com este id: ${id}`)
-    //     } catch (error) {
-    //         return res.status(500).json({ error: error.message })
-    //     }
+            if (numberOfAffectedRows){
+                return res.status(200).json(affectedRows);
+            }
+            return res.status(422).json(`Não existe um status com este id: ${id}`)
+        } catch (error) {
+            return res.status(500).json({ error: error.message })
+        }
 
-    // },
+    },
 }

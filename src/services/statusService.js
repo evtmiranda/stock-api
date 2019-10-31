@@ -36,31 +36,23 @@ const remove = async (id) => {
     return result;
 }
 
-// const update = async (stock) => {
-//     const [numberOfAffectedRows, affectedRows] = await Stock.update({
-//         lot: stock.lot,
-//         description: stock.description,
-//         refenrece: stock.reference, 
-//         quantity: stock.quantity, 
-//         tag: stock.tag, 
-//         store: stock.store, 
-//         unitValue: stock.unitValue, 
-//         outputDate: stock.outputDate, 
-//         outputQuantity: stock.outputQuantity, 
-//         updatedAt: new Date()
-//     },
-//         {
-//             where: { id: stock.id },
-//             returning: true
-//         })
+const update = async (status) => {
+    const [numberOfAffectedRows, affectedRows] = await Status.update({
+        description: status.description,
+        updatedAt: new Date()
+    },
+        {
+            where: { id: status.id },
+            returning: true
+        })
 
-//     return [numberOfAffectedRows, affectedRows];
-// }
+    return [numberOfAffectedRows, affectedRows];
+}
 
 
 module.exports = {
     findAndFilter,
     remove,
-    // update,
+    update,
     findOrCreate
 };
