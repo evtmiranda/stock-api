@@ -71,6 +71,10 @@ module.exports = (sequelize, DataTypes) => {
     freezeTableName: true,
     tableName: 'stocks'
   });
+
+  Stock.associate = function(models) {
+    Stock.hasOne(models.StockStatus, { foreignKey: 'stockId', as: 'stockStatus' });
+  };
   
   return Stock;
 };
