@@ -40,5 +40,6 @@ routes.get('/report', ReportController.get)
 
 routes.get('/status', StatusController.get)
 routes.post('/status', StatusController.post)
+routes.put('/status/:id', StatusController.update)
 
 module.exports = routes;
