@@ -4,7 +4,7 @@ module.exports = (sequelize, DataTypes) => {
       field: 'id',
       type: DataTypes.INTEGER,
       primaryKey: true,
-      autoIncrement: true,        
+      autoIncrement: true,
     },
     stockId: {
       field: 'stock_id',
@@ -30,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
   
   StockStatus.associate = function(models) {
     StockStatus.belongsTo(models.Stock, { foreignKey: 'stockId', as: 'stocks' });
-    StockStatus.belongsTo(models.Status, { foreignKey: 'statusId', as: 'status' });    
+    StockStatus.belongsTo(models.Status, { foreignKey: 'statusId', as: 'status' });
   };
 
   return StockStatus;
