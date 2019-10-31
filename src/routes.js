@@ -10,7 +10,6 @@ const PermissionProfileController = require('./controllers/PermissionProfileCont
 const WebGatewayController = require('./controllers/WebGatewayController');
 const StockController = require('./controllers/StockController');
 const ReportController = require('./controllers/ReportController');
-const StatusController = require('./controllers/StatusController');
 
 routes.get('/users', UserController.get)
 routes.post('/users', userValidationRules(), validate, UserController.create)
@@ -37,9 +36,5 @@ routes.delete('/stocks/:id', StockController.remove)
 routes.put('/stocks/:id', StockController.update)
 
 routes.get('/report', ReportController.get)
-
-routes.get('/status', StatusController.get)
-routes.post('/status', StatusController.post)
-
 
 module.exports = routes;
