@@ -35,6 +35,7 @@ module.exports = (sequelize, DataTypes) => {
     freezeTableName: true,
     tableName: 'permission_profile'
   })
+  
   PermissionProfile.associate = function (models) {
     PermissionProfile.belongsTo(models.Permission, { foreignKey: 'permissionId', as: 'permission' });
     PermissionProfile.belongsTo(models.Module, { foreignKey: 'moduleId', as: 'module' });

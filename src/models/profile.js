@@ -31,6 +31,10 @@ module.exports = (sequelize, DataTypes) => {
     freezeTableName: true,
     tableName: 'profiles'
   })
+
+  Profile.associate = function (models) {
+    Profile.hasMany(models.PermissionProfile, { foreignKey: 'profileId', as: 'permissions' });
+  };
   
   return Profile;
 };
