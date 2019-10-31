@@ -1,5 +1,5 @@
 const serialize = (entity) => {
-    return {
+     return {
         id: entity.id,
         lot: entity.lot,
         description: entity.description,
@@ -18,6 +18,12 @@ const serialize = (entity) => {
         payment: {
             date: entity.paymentDate,
             amount: entity.paymentAmount
+        },
+        stockStatus: {
+            status: {
+                id: entity.stockStatus.status.id,
+                description: entity.stockStatus.status.description,
+            }
         },
         updatedAt: entity.updatedAt,
         createdAt: entity.createdAt,
