@@ -36,5 +36,6 @@ routes.delete('/stocks/:id', StockController.remove)
 routes.put('/stocks/:id', StockController.update)
 
 routes.get('/report', ReportController.get)
+routes.get('/report/download', ReportController.getReport)
 
 module.exports = routes;
