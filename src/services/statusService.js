@@ -1,12 +1,18 @@
 const { Status } = require('../models')
 const Serializer  = require('../serializer/status')
 
-const create = async (params) => {
-    params.entryDate = params.entry.date
+const findOrCreate = async (status) => {
+    const [statusCreated, created] = await Status.findOrCreate({
+        where: {
+            description: status.description,
+            deletedAt: null
+        },
+        defaults: {
+            description: status.description,
+        }
+    })
 
-    const status = await Status.create(params)
-
-    return Serializer.serialize(status) 
+    return [statusCreated, created]
 }
 
 const findAndFilter = async (filters) => {
@@ -56,5 +62,5 @@ module.exports = {
     findAndFilter,
     remove,
     // update,
-    create
+    findOrCreate
 };

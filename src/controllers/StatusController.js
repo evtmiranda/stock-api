@@ -3,9 +3,16 @@ const statusService = require('../services/statusService')
 module.exports = {
     async post(req, res) {
         try {
-            const status = await statusService.create(req.body)
+            const { description } = req.body;
 
-            return res.status(201).json(status)
+            const [statusCreated, created] = await statusService.findOrCreate({
+                description
+            });
+
+            if (created) {
+              return res.status(201).json(statusCreated);
+            }
+            return res.status(422).json(`Já existe um status com esta descrição: ${description}`)
         } catch (error) {
             return res.status(500).json({ error: error.message })
         }
