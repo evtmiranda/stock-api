@@ -26,11 +26,14 @@ const findAndFilter = async (filters) => {
                 as: 'stockStatus',
                 include: [{
                     model: Status,
-                    as: 'status'
-                }]
+                    as: 'status',
+                }],
             }
-        ]
+        ],
+        order: [['created_at', 'desc']]
     })
+
+
 
     return stocks.map((stock) => { return Serializer.serialize(stock) })
 }
@@ -64,6 +67,17 @@ const update = async (stock) => {
         {
             where: { id: stock.id },
             returning: true
+        })
+
+    const stockStatus = {
+        statusId: stock.stockStatus.status.id
+    }
+
+    await StockStatus.update(stockStatus,
+        {
+            where: {
+                stockId: stock.id
+            }
         })
 
     return [numberOfAffectedRows, affectedRows];

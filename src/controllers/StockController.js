@@ -39,9 +39,10 @@ module.exports = {
     async update(req, res) {
         try {
             const id = req.params.id;
-            const { lot, description, reference, quantity, tag, store, unitValue, outputDate, outputQuantity } = req.body;
+            const { lot, description, reference, quantity, tag, store, unitValue, outputDate, outputQuantity, stockStatus } = req.body;
 
             const [numberOfAffectedRows, affectedRows] = await stockService.update({
+                id,
                 lot,
                 description,
                 reference, 
@@ -51,11 +52,13 @@ module.exports = {
                 unitValue, 
                 outputDate, 
                 outputQuantity, 
+                stockStatus
             });
 
             if (numberOfAffectedRows){
                 return res.status(200).json(affectedRows);
             }
+
             return res.status(422).json(`Não existe um estoque com este id: ${id}`)
         } catch (error) {
             return res.status(500).json({ error: error.message })
