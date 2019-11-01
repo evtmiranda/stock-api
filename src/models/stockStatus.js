@@ -4,7 +4,7 @@ module.exports = (sequelize, DataTypes) => {
       field: 'id',
       type: DataTypes.INTEGER,
       primaryKey: true,
-      autoIncrement: true,        
+      autoIncrement: true,
     },
     stockId: {
       field: 'stock_id',
@@ -27,10 +27,10 @@ module.exports = (sequelize, DataTypes) => {
     freezeTableName: true,
     tableName: 'stock_status'
   });
-  
-  StockStatus.associate = function(models) {
+
+  StockStatus.associate = function (models) {
     StockStatus.belongsTo(models.Stock, { foreignKey: 'stockId', as: 'stocks' });
-    StockStatus.belongsTo(models.Status, { foreignKey: 'statusId', as: 'status' });    
+    StockStatus.belongsTo(models.Status, { foreignKey: 'statusId', as: 'status' });
   };
 
   return StockStatus;
