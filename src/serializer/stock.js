@@ -1,5 +1,7 @@
+const moment = require('moment')
+
 const serialize = (entity) => {
-     return {
+    return {
         id: entity.id,
         lot: entity.lot,
         description: entity.description,
@@ -9,22 +11,17 @@ const serialize = (entity) => {
         store: entity.store,
         unitValue: entity.unitValue,
         entry: {
-            date: entity.entryDate
+            date: moment(entity.entryDate).format('YYYY-MM-DD')
         },
         output: {
-            date: entity.outputDate,
+            date: entity.outputDate ? moment(entity.outputDate).format('YYYY-MM-DD') : entity.outputDate,
             quantity: entity.outputQuantity
         },
         payment: {
-            date: entity.paymentDate,
+            date: moment(entity.paymentDate).format('YYYY-MM-DD'),
             amount: entity.paymentAmount
         },
-        stockStatus: {
-            status: {
-                id: entity.stockStatus.status.id,
-                description: entity.stockStatus.status.description,
-            }
-        },
+        stockStatus: entity.stockStatus,
         updatedAt: entity.updatedAt,
         createdAt: entity.createdAt,
         deletedAt: entity.deletedAt
