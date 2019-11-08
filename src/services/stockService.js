@@ -38,6 +38,25 @@ const findAndFilter = async (filters) => {
     return stocks.map((stock) => { return Serializer.serialize(stock) })
 }
 
+const getByFilters = async (filters) => {
+        if (filters.status) {
+            var status = await Status.findOne({
+                where: { description: filters.status }
+            })
+
+            if (!status) {
+                return "Status invalido"
+            }
+
+            const stockStatuses = await StockStatus.findAll({
+                where: {
+                    status_id: status.id
+                }})
+
+            return stockStatuses.length
+        }
+    }
+
 const remove = async (id) => {
     const result = await Stock.update({
         deletedAt: new Date()
@@ -88,5 +107,6 @@ module.exports = {
     findAndFilter,
     remove,
     update,
-    create
+    create,
+    getByFilters
 };

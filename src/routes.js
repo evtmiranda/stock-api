@@ -32,6 +32,7 @@ routes.get('/web/getPermissions', WebGatewayController.getPermissions)
 routes.get('/web/getProfilesAndPermissions', WebGatewayController.getProfilesAndPermissions)
 
 routes.get('/stocks', StockController.get)
+routes.get('/stocks/:status', StockController.getByStatus)
 routes.post('/stocks', stockValidationRules(), validate, StockController.post)
 routes.delete('/stocks/:id', StockController.remove)
 routes.put('/stocks/:id', StockController.update)
