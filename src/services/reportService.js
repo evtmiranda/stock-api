@@ -4,6 +4,7 @@ const Sequelize = require('sequelize')
 const moment = require('moment')
 const fs = require('fs')
 const Op = Sequelize.Op
+const s3 = require('../clients/s3')
 
 const findAll = async () => {
     const today = new Date();
@@ -77,14 +78,21 @@ const generateSpreadsheet = async (filters) => {
     const stocks = await getByFilters(filters)
 
     const headers = Object.keys(stocks[0].dataValues).join(',') + '\n'
-    const body = stocks.map((stock) => { return Object.values(stock.dataValues).join(',') })
-    const csv = headers + body
+    const body = stocks.map((stock) => { return Object.values(stock.dataValues).join(',').slice(0, -1) + '\n' })
+    const csv = headers + body.join('')
 
-    const path = "/tmp/report-" + Date.now() + ".csv"
+    const filename = "report" + Date.now() + ".csv"
+    const path = "/tmp/" + filename
 
-    fs.writeFile(path, csv, function (error) {console.log(error)})
+    await fs.writeFile(path, csv, function (error) { console.log(error) })
 
-    return {"path": path}
+    const s3FileParams = s3.buildUploadParams(path, filename)
+    const client = s3.build()
+
+    const uploader = await client.uploadFile(s3FileParams)
+    const s3Path = await s3.getPublicUrlHttp(filename)
+
+    return {"path": s3Path}
 }
 
 module.exports = {
