@@ -53,7 +53,7 @@ const getByFilters = async (filters) => {
             return "Status invalido"
         }
 
-        const stockStatuses = await StockStatus.findAll({
+        const stockStatuses = await StockStatus.findAndCountAll({
             where: {
                 status_id: status.id
             }
