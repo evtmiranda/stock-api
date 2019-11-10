@@ -1,5 +1,10 @@
 const { Stock, StockStatus, Status } = require('../models')
 const Serializer = require('../serializer/stock')
+const Sequelize = require('sequelize')
+const constants = require('../../config/constants')
+const config = require('../../config/database')
+const database = config[constants.environment]
+const sequelize = new Sequelize(database)
 
 const create = async (params) => {
     params.entryDate = params.entry.date
@@ -39,25 +44,38 @@ const findAndFilter = async (filters) => {
 }
 
 const getByFilters = async (filters) => {
-        if (filters.status) {
-            var status = await Status.findOne({
-                where: { description: filters.status }
-            })
+    if (filters) {
+        var status = await Status.findOne({
+            where: { description: filters }
+        })
 
-            if (!status) {
-                return "Status invalido"
-            }
-
-            const stockStatuses = await StockStatus.findAll({
-                where: {
-                    status_id: status.id
-                }})
-
-            return stockStatuses.length
+        if (!status) {
+            return "Status invalido"
         }
-    }
 
-const remove = async (id) => {
+        const stockStatuses = await StockStatus.findAll({
+            where: {
+                status_id: status.id
+            }
+        })
+        return stockStatuses
+    }
+}
+
+const getQuantityByStatus = async (filters) => {
+    const stockStatuses = sequelize.query(
+    `SELECT status.description,
+     COUNT(*) AS quantity 
+     FROM stocks AS s 
+     INNER JOIN stock_status AS ss ON s.id = ss.stock_id 
+     INNER JOIN status ON status.id = ss.status_id 
+     GROUP BY status.description`
+    )
+
+   return stockStatuses
+}
+
+const remove =  async (id) => {
     const result = await Stock.update({
         deletedAt: new Date()
     },
@@ -105,8 +123,9 @@ const update = async (stock) => {
 
 module.exports = {
     findAndFilter,
+    getByFilters,
+    getQuantityByStatus,
     remove,
     update,
     create,
-    getByFilters
 };

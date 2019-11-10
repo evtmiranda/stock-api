@@ -27,11 +27,9 @@ module.exports = {
         try {
             const filters = req.params;
 
-            const stocks = await stockService.getByFilters(filters);
+            const [stockStatuses, metaData] = await stockService.getQuantityByStatus(filters);
 
-            return res.status(200).json({
-                "quantity": stocks
-            });
+            return res.status(200).json(stockStatuses)
         } catch (error) {
             return res.status(500).json({ error: error.message });
         }

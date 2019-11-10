@@ -27,6 +27,6 @@ module.exports = (sequelize, DataTypes) => {
     freezeTableName: true,
     tableName: 'status'
   });
-  
+
   return Status;
 };
