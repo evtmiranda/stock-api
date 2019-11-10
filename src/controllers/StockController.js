@@ -25,6 +25,26 @@ module.exports = {
 
     async getByStatus(req, res) {
         try {
+            const status = req.params.status;
+
+            const stocks = await stockService.getByFilters(status);
+
+            if (!stocks.count){
+                return res.status(404).json(`Não foram localizados itens para o status: ${status}`)
+            }
+            else {
+            return res.status(200).json({
+                "description": status,
+                "quantity": stocks.count
+            });
+        }
+        } catch (error) {
+            return res.status(500).json({ error: error.message });
+        }
+    },
+
+    async getAllStatus(req, res) {
+        try {
             const filters = req.params;
 
             const [stockStatuses, metaData] = await stockService.getQuantityByStatus(filters);
