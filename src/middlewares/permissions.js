@@ -20,6 +20,10 @@ const userHasPermission = async (req, res, next) => {
     const permissionName = methods[req.method.toLowerCase()]
     const moduleId = modules[moduleName]
 
+    if (!userId) {
+        next()
+    }
+
     const user = await User.findOne({
         where: {
             id: userId,
