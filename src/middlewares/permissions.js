@@ -1,56 +1,45 @@
-const { Permission, User, PermissionProfile } = require('../models')
+const JwtService = require('../services/jwtService')
+const moduleEnum = require('../enum/module')
+const permissionEnum = require('../enum/permission')
+const UserRepository = require('../repositories/user')
+const PermissionRepository = require('../repositories/permission')
+const PermissionProfileRepository = require('../repositories/permissionProfile')
 
 const userHasPermission = async (req, res, next) => {
-    const modules = {
-        stocks: 2,
-        report: 5,
-        users: 3,
-        profiles: 4
+    const nonSecurePaths = ['/login']
+
+    if (nonSecurePaths.includes(req.path)) {
+        return next()
     }
 
-    const methods = {
-        get: 'view',
-        post: 'create',
-        put: 'edit',
-        del: 'delete'
+    const authorization = req.headers.authorization.split(' ')[1]
+    
+    if (!authorization) {
+        return res.status(401).json({ error: "User must be logged in"} )
     }
 
     const moduleName = req.path.substring(1, req.path.length)
-    const userId = req.headers.userid
-    const permissionName = methods[req.method.toLowerCase()]
-    const moduleId = modules[moduleName]
+
+    const userAuthentication = JwtService.validateToken(authorization)
+    const userId = userAuthentication.userId
+
+    const permissionName = permissionEnum[req.method.toLowerCase()]
+    const moduleId = moduleEnum[moduleName]
 
     if (!userId) {
         next()
     }
 
-    const user = await User.findOne({
-        where: {
-            id: userId,
-            deletedAt: null
-        }
-    })
-
-    const permission = await Permission.findOne({
-        where: {
-            name: permissionName,
-            deletedAt: null
-        }
-    })
-
-    const userPermission = await PermissionProfile.findOne({
-        where: {
-            profileId: user.profileId,
-            permissionId: permission.id,
-            moduleId: moduleId,
-            deletedAt: null
-        }
-    })
-
-    console.log(userPermission)
+    const user = await UserRepository.getById(userId)
+    const permission = await PermissionRepository.getByName(permissionName)
+    const userPermission = await PermissionProfileRepository.getProfilePermissionByModule(
+        user.profileId,
+        permission.id,
+        moduleId
+    )
 
     if (!userPermission) {
-        return res.status(401).json({ error: "user has no permission"} )
+        return res.status(401).json({ error: "User has no permission"} )
     }
 
     return next()
