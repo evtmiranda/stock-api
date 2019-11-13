@@ -9,6 +9,17 @@ const getById = async (id) => {
     })
 }
 
+const getByCredentials = async (username, password) => {
+    return User.findOne({
+        where: {
+            username: username,
+            password: password,
+            deletedAt: null
+        }
+    })
+}
+
 module.exports = {
-    getById
+    getById,
+    getByCredentials
 }
