@@ -1,29 +1,20 @@
-const jwt = require('jsonwebtoken')
-const { jwtSecret } = require('../../config/constants')
-const Sequelize = require('sequelize')
-const { User } = require('../models')
+const JwtService = require('./jwtService')
 const Serializer = require('../serializer/login')
+const UserRepository = require('../repositories/user')
 
 const generateUserJWT = async (username, password) => {
-    const user = await User.findOne({
-        where: {
-            username: username,
-            password: password,
-            deletedAt: null
-        }
-    })
+    const user = await UserRepository.getByCredentials(username, password)
 
     if (!user) {
         return false;
     }
 
-    const userJwt = jwt.sign(
+    const userJwt = JwtService.generateToken(
         {
             userId: user.id,
             username: user.username,
             profileId: user.profileId
-        },
-        jwtSecret
+        }
     )
 
     return Serializer.serialize(user, userJwt)
