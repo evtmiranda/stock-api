@@ -6,7 +6,7 @@ const PermissionRepository = require('../repositories/permission')
 const PermissionProfileRepository = require('../repositories/permissionProfile')
 
 const userHasPermission = async (req, res, next) => {
-    const nonSecurePaths = ['/login']
+    const nonSecurePaths = ['/login', '/web']
 
     if (nonSecurePaths.includes(req.path)) {
         return next()
@@ -25,10 +25,6 @@ const userHasPermission = async (req, res, next) => {
 
     const permissionName = permissionEnum[req.method.toLowerCase()]
     const moduleId = moduleEnum[moduleName]
-
-    if (!userId) {
-        next()
-    }
 
     const user = await UserRepository.getById(userId)
     const permission = await PermissionRepository.getByName(permissionName)
