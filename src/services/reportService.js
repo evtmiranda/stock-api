@@ -1,5 +1,5 @@
 const { Stock, Status, StockStatus } = require('../models')
-const Serializer  = require('../serializer/stock')
+const Serializer = require('../serializer/stock')
 const Sequelize = require('sequelize')
 const moment = require('moment')
 const fs = require('fs')
@@ -24,15 +24,28 @@ const findAll = async () => {
     return report;
 }
 
-const getByFilters = async(filters) => {
+const getByFilters = async (filters) => {
     const from = filters.from ? moment(filters.from).toDate() : '2019-01-01'
     const to = filters.to ? moment(filters.to).toDate() : moment().toDate()
 
-    const betweenDates = {
+    let queryFilters = {
         created_at: {
             [Op.between]: [from, to]
+        },
+        deleted_at: null
+    }
+
+    if (filters.store) {
+        queryFilters = {
+            created_at: {
+                [Op.between]: [from, to]
+            },
+            $col: Sequelize.where(Sequelize.fn('lower', Sequelize.col('store')), Sequelize.fn('lower', filters.store)),
+            deleted_at: null
         }
     }
+
+    let statusFilter = {}
 
     if (filters.status) {
         var status = await Status.findOne({
@@ -40,41 +53,41 @@ const getByFilters = async(filters) => {
         })
 
         if (!status) {
-            return "Status invalido"
+            return { error: "Status invalido" }
         }
 
-        const stockStatuses = await StockStatus.findAll({
-            where: {
-                status_id: status.id
-            },
-            include: [
-                {
-                    model: Stock,
-                    as: 'stocks',
-                    where: betweenDates,
-                    include:[{
-                        model: Status,
-                        as: 'status'
-                    }]
-                }
-            ]
-        })
-
-        const stocks = stockStatuses.map((stockStatus) => { return stockStatus.stocks })
-        return stocks
+        statusFilter = {
+            id: status.id
+        }
     }
 
     const stocks = await Stock.findAll({
-        where: betweenDates,
+        where: queryFilters,
+        include: [
+            {
+                model: StockStatus,
+                as: 'stockStatus',
+                include: [{
+                    model: Status,
+                    as: 'status',
+                    where: statusFilter
+                }],
+            }
+        ],
+        order: [['created_at', 'desc']]
     })
 
-    return stocks
+    return stocks.filter(p => p.stockStatus !== null)
 }
 
 const getReport = async (filters) => {
     const stocks = await getByFilters(filters)
 
-    return stocks.map((stock) => { return Serializer.serialize(stock) }) 
+    if (stocks.error) {
+        return stocks
+    }
+
+    return stocks.map((stock) => { return Serializer.serialize(stock) })
 }
 
 const generateSpreadsheet = async (filters) => {
@@ -86,9 +99,9 @@ const generateSpreadsheet = async (filters) => {
 
     const path = "/tmp/report-" + Date.now() + ".csv"
 
-    fs.writeFile(path, csv, function (error) {console.log(error)})
+    fs.writeFile(path, csv, function (error) { console.log(error) })
 
-    return {"path": path}
+    return { "path": path }
 }
 
 module.exports = {

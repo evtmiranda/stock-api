@@ -18,7 +18,7 @@ const serialize = (entity) => {
             quantity: entity.outputQuantity
         },
         payment: {
-            date: moment(entity.paymentDate).format('YYYY-MM-DD'),
+            date: entity.paymentDate ? moment(entity.paymentDate).format('YYYY-MM-DD') : entity.paymentDate,
             amount: entity.paymentAmount
         },
         stockStatus: entity.stockStatus,
