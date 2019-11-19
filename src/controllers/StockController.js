@@ -55,6 +55,30 @@ module.exports = {
         }
     },
 
+    async getQuantityByClient(req, res) {
+        try {
+            const filters = req.params;
+
+            const stocks = await stockService.getQuantityByClient(filters);
+
+            return res.status(200).json(stocks)
+        } catch (error) {
+            return res.status(500).json({ error: error.message });
+        }
+    },
+
+    async getEntryAndOutQuantityByDay(req, res) {
+        try {
+            const filters = req.params;
+
+            const stocks = await stockService.getEntryAndOutQuantityByDay(filters);
+
+            return res.status(200).json(stocks)
+        } catch (error) {
+            return res.status(500).json({ error: error.message });
+        }
+    },
+
     async remove(req, res) {
         try {
             const id = req.params.id;

@@ -33,6 +33,8 @@ routes.get('/web/getProfilesAndPermissions', WebGatewayController.getProfilesAnd
 
 routes.get('/stocks', StockController.get)
 routes.get('/stocks/status', StockController.getAllStatus)
+routes.get('/stocks/client', StockController.getQuantityByClient)
+routes.get('/stocks/day', StockController.getEntryAndOutQuantityByDay)
 routes.get('/stocks/:status', StockController.getByStatus)
 routes.post('/stocks', stockValidationRules(), validate, StockController.post)
 routes.delete('/stocks/:id', StockController.remove)
