@@ -2,10 +2,11 @@ const { body, validationResult } = require('express-validator')
 
 const userValidationRules = () => {
   return [
-    body('name').matches('^[a-zA-Z_]+( [a-zA-Z_]+)*$').withMessage('O campo name deve possuir apenas letras.'),
-    body('username').isAlpha().withMessage('O campo username deve possuir apenas letras.'),
-    body('username').isLength({ min: 3, max: 50}).withMessage('O campo name deve possuir no mínimo 3 caracteres e no máximo 50 caracteres.'),
-    body('password').isLength({ min: 6 }).withMessage('O campo password deve conter pelo menos seis caracteres.'),
+    body('name').matches('^[a-zA-Z_]+( [a-zA-Z_]+)*$').withMessage('O campo nome deve possuir apenas letras.'),
+    body('name').isLength({ min: 3, max: 50}).withMessage('O campo nome deve possuir no mínimo 3 e no máximo 50 caracteres.'),
+    body('username').isAlpha().withMessage('O campo nome de usuário deve possuir apenas letras.'),
+    body('username').isLength({ min: 3, max: 30}).withMessage('O campo nome de usuário deve possuir no mínimo 3 e no máximo 30 caracteres.'),
+    body('password').isLength({ min: 6, max: 8 }).withMessage('O campo senha deve possuir no mínimo 6 e no máximo 8 caracteres.'),
     body('profileId').isInt().withMessage('O campo ProfileId deve possuir apenas valores númericos inteiros.'),
   ]
 }
@@ -29,7 +30,7 @@ const validate = (req, res, next) => {
     return next()
   }
   const extractedErrors = []
-  errors.array().map(err => extractedErrors.push({ [err.param]: err.msg }))
+  errors.array().map(err => extractedErrors.push({ field: err.param, message: err.msg }))
 
   return res.status(422).json({
     errors: extractedErrors,

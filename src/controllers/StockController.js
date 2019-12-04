@@ -27,9 +27,11 @@ module.exports = {
         try {
             const status = req.params.status;
 
-            const stocks = await stockService.getQuantityByStatus(status);
+            const [stocks, metadata] = await stockService.getQuantityByStatus(status);
 
             let stock = stocks.filter(p => p.description === status);
+
+            stock = stock[0]
 
             if(stock.length === 0){
                 stock = {
