@@ -27,17 +27,19 @@ module.exports = {
         try {
             const status = req.params.status;
 
-            const stocks = await stockService.getByFilters(status);
+            const stocks = await stockService.getQuantityByStatus(status);
 
-            if (!stocks.count){
-                return res.status(404).json(`Não foram localizados itens para o status: ${status}`)
+            let stock = stocks.filter(p => p.description === status);
+
+            if(stock.length === 0){
+                stock = {
+                    description: "estoque",
+                    quantity: 0
+                }
             }
-            else {
-            return res.status(200).json({
-                "description": status,
-                "quantity": stocks.count
-            });
-        }
+
+            return res.status(200).json(stock)
+
         } catch (error) {
             return res.status(500).json({ error: error.message });
         }
@@ -67,11 +69,9 @@ module.exports = {
         }
     },
 
-    async getEntryAndOutQuantityByDay(req, res) {
+    async getEntryAndOutQuantityByDay(_req, res) {
         try {
-            const filters = req.params;
-
-            const stocks = await stockService.getEntryAndOutQuantityByDay(filters);
+            const stocks = await stockService.getEntryAndOutQuantityByDay();
 
             return res.status(200).json(stocks)
         } catch (error) {
@@ -101,17 +101,17 @@ module.exports = {
                 id,
                 lot,
                 description,
-                reference, 
-                quantity, 
-                tag, 
-                store, 
-                unitValue, 
-                outputDate, 
-                outputQuantity, 
+                reference,
+                quantity,
+                tag,
+                store,
+                unitValue,
+                outputDate,
+                outputQuantity,
                 stockStatus
             });
 
-            if (numberOfAffectedRows){
+            if (numberOfAffectedRows) {
                 return res.status(200).json(affectedRows);
             }
 

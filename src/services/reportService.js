@@ -18,6 +18,7 @@ const findAll = async () => {
         ],
         where: {
             [Op.between]: [firstDay, today],
+            deleted_at: null
         }
     })
 
