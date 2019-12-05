@@ -16,6 +16,9 @@ const WebGatewayController = require('./controllers/WebGatewayController');
 const StockController = require('./controllers/StockController');
 const ReportController = require('./controllers/ReportController');
 const StatusController = require('./controllers/StatusController');
+const LoginController = require('./controllers/LoginController');
+
+routes.post('/', LoginController.login)
 
 routes.get('/users', UserController.get)
 routes.post('/users', userValidationRules(), validate, UserController.create)
