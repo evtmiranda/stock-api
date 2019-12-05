@@ -39,7 +39,7 @@ const findOrCreate = async (user) => {
     const [userCreated, created] = await User.findOrCreate({
         where: {
             username: user.username,
-            deletedAt: null
+            deleted_at: null
         },
         defaults: {
             username: user.username,

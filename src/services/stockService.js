@@ -124,7 +124,7 @@ const update = async (stock) => {
     const [numberOfAffectedRows, affectedRows] = await Stock.update({
         lot: stock.lot,
         description: stock.description,
-        refenrece: stock.reference,
+        reference: stock.reference,
         quantity: stock.quantity,
         tag: stock.tag,
         store: stock.store,

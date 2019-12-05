@@ -1,5 +1,10 @@
 const express = require('express');
-const { userValidationRules, stockValidationRules, validate } = require('./middlewares/validator.js')
+const {
+    userValidationRules,
+    stockValidationRules,
+    profileValidationRules,
+    statusValidationRules,
+    validate } = require('./middlewares/validator.js')
 const routes = express.Router();
 
 const UserController = require('./controllers/UserController');
@@ -18,14 +23,12 @@ routes.delete('/users/:id', UserController.remove)
 routes.put('/users/:id', userValidationRules(), validate, UserController.update)
 
 routes.get('/profiles', ProfileController.get)
-routes.post('/profiles', ProfileController.create)
+routes.post('/profiles', profileValidationRules(), validate, ProfileController.create)
 routes.delete('/profiles/:id', ProfileController.remove)
-routes.put('/profiles/:id', ProfileController.update)
+routes.put('/profiles/:id', profileValidationRules(), validate, ProfileController.update)
 
 routes.get('/modules', ModuleController.get)
-
 routes.get('/permissions', PermissionController.get)
-
 routes.get('/permissionProfiles', PermissionProfileController.get)
 
 routes.get('/web/getPermissions', WebGatewayController.getPermissions)
@@ -38,13 +41,13 @@ routes.get('/stocks/day', StockController.getEntryAndOutQuantityByDay)
 routes.get('/stocks/:status', StockController.getByStatus)
 routes.post('/stocks', stockValidationRules(), validate, StockController.post)
 routes.delete('/stocks/:id', StockController.remove)
-routes.put('/stocks/:id', StockController.update)
+routes.put('/stocks/:id', stockValidationRules(), validate, StockController.update)
 
 routes.get('/report', ReportController.get)
 routes.get('/report/download', ReportController.getReport)
 
 routes.get('/status', StatusController.get)
-routes.post('/status', StatusController.post)
-routes.put('/status/:id', StatusController.update)
+routes.post('/status', statusValidationRules(), validate, StatusController.post)
+routes.put('/status/:id', statusValidationRules(), validate, StatusController.update)
 
 module.exports = routes;

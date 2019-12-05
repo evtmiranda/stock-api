@@ -9,7 +9,7 @@ module.exports = {
 
             return res.json(users);
         } catch (error) {
-            return res.status(500).json({ error: error.message });
+            return responseException(res, error)
         }
     },
 
@@ -25,11 +25,18 @@ module.exports = {
             });
 
             if (created) {
-              return res.status(201).json(userCreated);
+                return res.status(201).json(userCreated);
             }
-            return res.status(422).json(`Já existe um usuário com este username: ${username}`)
+
+            return res.status(422).json({
+                errors: [
+                    {
+                        field: "Nome de usuário",
+                        message: `Já existe um usuário com este username: ${username}`
+                    }]
+            })
         } catch (error) {
-            return res.status(500).json({ error: error.message })
+            return responseException(res, error)
         }
     },
 
@@ -46,14 +53,20 @@ module.exports = {
                 profileId
             });
 
-            if (numberOfAffectedRows){
+            if (numberOfAffectedRows) {
                 return res.status(201).json(affectedRows);
             }
-            return res.status(422).json(`Não existe um usuário com este id: ${id}`)
-        } catch (error) {
-            return res.status(500).json({ error: error.message })
-        }
 
+            return res.status(422).json({
+                errors: [
+                    {
+                        field: "Id",
+                        message: "Oops, ocorreu algo inesperado."
+                    }]
+            })
+        } catch (error) {
+            return responseException(res, error)
+        }
     },
 
     async remove(req, res) {
@@ -65,8 +78,17 @@ module.exports = {
 
             return res.status(200).json(response);
         } catch (error) {
-            return res.status(500).json({ error: "Ops! Something went wrong." })
+            return responseException(res, error)
         }
-
     }
+}
+
+const responseException = (res, error) => {
+    return res.status(500).json({
+        errors: [
+            {
+                field: "",
+                message: "Oops, ocorreu algo inesperado."
+            }]
+    })
 }
