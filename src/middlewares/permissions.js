@@ -4,6 +4,7 @@ const permissionEnum = require('../enum/permission')
 const UserRepository = require('../repositories/user')
 const PermissionRepository = require('../repositories/permission')
 const PermissionProfileRepository = require('../repositories/permissionProfile')
+const util = require('util')
 
 const userHasPermission = async (req, res, next) => {
     const nonSecurePaths = ['/login', '/web']
@@ -12,10 +13,14 @@ const userHasPermission = async (req, res, next) => {
         return next()
     }
 
+    if (util.isNullOrUndefined(req.headers.authorization)) {
+        return res.status(401).json({ error: "User must be logged in" })
+    }
+
     const authorization = req.headers.authorization.split(' ')[1]
-    
+
     if (!authorization) {
-        return res.status(401).json({ error: "User must be logged in"} )
+        return res.status(401).json({ error: "User must be logged in" })
     }
 
     const moduleName = req.path.substring(1, req.path.length)
@@ -35,7 +40,7 @@ const userHasPermission = async (req, res, next) => {
     )
 
     if (!userPermission) {
-        return res.status(401).json({ error: "User has no permission"} )
+        return res.status(401).json({ error: "User has no permission" })
     }
 
     return next()
