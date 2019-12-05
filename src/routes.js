@@ -5,7 +5,6 @@ const {
     profileValidationRules,
     statusValidationRules,
     validate } = require('./middlewares/validator.js')
-const { userHasPermission } = require('./middlewares/permissions')
 const routes = express.Router();
 
 const UserController = require('./controllers/UserController');
@@ -21,7 +20,7 @@ const LoginController = require('./controllers/LoginController');
 
 routes.post('/', LoginController.login)
 
-routes.get('/users', userHasPermission, UserController.get)
+routes.get('/users', UserController.get)
 routes.post('/users', userValidationRules(), validate, UserController.create)
 routes.delete('/users/:id', UserController.remove)
 routes.put('/users/:id', userValidationRules(), validate, UserController.update)

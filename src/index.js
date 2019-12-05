@@ -1,6 +1,7 @@
 const express = require('express')
 const cors = require('cors')
 const { port } = require('../config/constants')
+const { userHasPermission } = require('../src/middlewares/permissions')
 const YAML = require('yamljs')
 const app = express()
 
@@ -14,6 +15,8 @@ app.use(express.json())
 app.use(cors())
 
 app.use(convertNullStringToNullType)
+
+app.use(userHasPermission)
 
 app.use('/api/v1/', require('./routes'))
 

@@ -140,15 +140,21 @@ module.exports = {
 
             const currentStock = await stockService.findAndFilter({ id })
 
-            if (!util.isNullOrUndefined(outputDate) &&
-                new Date(outputDate) < currentStock[0].entry.date) {
-                return res.status(422).json({
-                    errors: [
-                        {
-                            field: "quantidade",
-                            message: `A data de saída não pode ser menor do que a de entrada (${moment(currentStock[0].entry.date).format('DD/MM/YYYY')}).`
-                        }]
-                })
+            if (!util.isNullOrUndefined(outputDate)) {
+                const entryDate = currentStock[0].entry.date;
+                const outputDateDate = new Date(outputDate)
+                const outputDateWithoutTime = new Date(outputDateDate.getYear(), outputDateDate.getMonth(), outputDateDate.getDate(), 0, 0, 0);
+                const entryDateWithoutTime = new Date(entryDate.getYear(), entryDate.getMonth(), entryDate.getDate(), 0, 0, 0);
+
+                if (outputDateWithoutTime < entryDateWithoutTime) {
+                    return res.status(422).json({
+                        errors: [
+                            {
+                                field: "quantidade",
+                                message: `A data de saída não pode ser menor do que a de entrada (${moment(currentStock[0].entry.date).format('DD/MM/YYYY')}).`
+                            }]
+                    })
+                }
             }
 
             const [numberOfAffectedRows, affectedRows] = await stockService.update({
@@ -186,7 +192,6 @@ const responseException = (res, error) => {
     return res.status(500).json({
         errors: [
             {
-                field: "",
                 message: "Oops, ocorreu algo inesperado."
             }]
     })

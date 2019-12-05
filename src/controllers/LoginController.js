@@ -9,12 +9,27 @@ module.exports = {
             const response = await loginService.generateUserJWT(username, password)
 
             if (!response) {
-                return res.status(401).json({ error: 'Invalid credentials' });
+                return res.status(401).json({
+                    errors: [
+                        {
+                            field: "",
+                            message: "Credenciais inválidas."
+                        }]
+                })
             }
 
             return res.json(response);
         } catch (error) {
-            return res.status(500).json({ error: error.message });
+            return responseException(res, error)
         }
     },
+}
+
+const responseException = (res, error) => {
+    return res.status(500).json({
+        errors: [
+            {
+                message: "Oops, ocorreu algo inesperado."
+            }]
+    })
 }

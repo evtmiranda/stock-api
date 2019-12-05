@@ -79,7 +79,6 @@ const responseException = (res, error) => {
     return res.status(500).json({
         errors: [
             {
-                field: "",
                 message: "Oops, ocorreu algo inesperado."
             }]
     });
