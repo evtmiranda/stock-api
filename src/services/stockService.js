@@ -38,38 +38,18 @@ const findAndFilter = async (filters) => {
         order: [['created_at', 'desc']]
     })
 
-
-
     return stocks.map((stock) => { return Serializer.serialize(stock) })
 }
 
-const getByFilters = async (filters) => {
-    if (filters) {
-        var status = await Status.findOne({
-            where: { description: filters }
-        })
-
-        if (!status) {
-            return "Status invalido"
-        }
-
-        const stockStatuses = await StockStatus.findAndCountAll({
-            where: {
-                status_id: status.id
-            }
-        })
-        return stockStatuses
-    }
-}
-
-const getQuantityByStatus = async (filters) => {
+const getQuantityByStatus = async () => {
     const stockStatuses = sequelize.query(
         `SELECT status.description,
-     COUNT(*) AS quantity 
-     FROM stocks AS s 
-     INNER JOIN stock_status AS ss ON s.id = ss.stock_id 
-     INNER JOIN status ON status.id = ss.status_id 
-     GROUP BY status.description`
+            COUNT(*) AS quantity 
+        FROM stocks AS s 
+        INNER JOIN stock_status AS ss ON s.id = ss.stock_id 
+        INNER JOIN status ON status.id = ss.status_id
+        WHERE s.deleted_at IS NULL 
+        GROUP BY status.description`
     )
 
     return stockStatuses
@@ -109,13 +89,16 @@ const getEntryAndOutQuantityByDay = async () => {
                             1
                     )
                     SELECT
-                        TO_CHAR(DATE(e.entry_date), 'dd') AS day,
-                        e.entry_quantity AS "entryQuantity",
+                        TO_CHAR(dd.date, 'dd') AS day,
+                        COALESCE(e.entry_quantity, 0) AS "entryQuantity",
                         COALESCE(o.output_quantity, 0) AS "outputQuantity"
-                    FROM entry AS e
+                    FROM dim_date AS dd
+                    LEFT JOIN entry AS e
+                    ON dd.date = DATE(e.entry_date)
                     LEFT JOIN output AS o
-                    ON e.entry_date = o.output_date
+                    ON dd.date = DATE(o.output_date)
                     WHERE TO_CHAR(DATE(e.entry_date), 'yyyy-mm') = TO_CHAR(current_date, 'yyyy-mm')
+                    OR TO_CHAR(DATE(o.output_date), 'yyyy-mm') = TO_CHAR(current_date, 'yyyy-mm')
                     ORDER BY 
                         1`
 
@@ -141,7 +124,7 @@ const update = async (stock) => {
     const [numberOfAffectedRows, affectedRows] = await Stock.update({
         lot: stock.lot,
         description: stock.description,
-        refenrece: stock.reference,
+        reference: stock.reference,
         quantity: stock.quantity,
         tag: stock.tag,
         store: stock.store,
@@ -172,7 +155,6 @@ const update = async (stock) => {
 
 module.exports = {
     findAndFilter,
-    getByFilters,
     getQuantityByStatus,
     getQuantityByClient,
     getEntryAndOutQuantityByDay,

@@ -11,14 +11,14 @@ const serialize = (entity) => {
         store: entity.store,
         unitValue: entity.unitValue,
         entry: {
-            date: moment(entity.entryDate).format('YYYY-MM-DD')
+            date: entity.entryDate
         },
         output: {
             date: entity.outputDate ? moment(entity.outputDate).format('YYYY-MM-DD') : entity.outputDate,
             quantity: entity.outputQuantity
         },
         payment: {
-            date: entity.paymentDate ? moment(entity.paymentDate).format('YYYY-MM-DD') : entity.paymentDate,
+            date: entity.paymentDate,
             amount: entity.paymentAmount
         },
         stockStatus: entity.stockStatus,

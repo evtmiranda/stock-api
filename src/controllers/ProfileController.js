@@ -9,7 +9,7 @@ module.exports = {
 
             return res.json(profiles);
         } catch (error) {
-            return res.status(500).json({ error: error.message });
+            return responseException(res, error);
         }
     },
 
@@ -27,9 +27,15 @@ module.exports = {
                 return res.status(201).json(profileCreated);
             }
 
-            return res.status(422).json(`Já existe um perfil com este nome: ${name}`)
+            return res.status(422).json({
+                errors: [
+                    {
+                        field: "Nome de perfil",
+                        message: `Já existe um perfil com este nome: ${name}`
+                    }]
+            });
         } catch (error) {
-            return res.status(500).json({ error: error.message })
+            return responseException(res, error);
         }
     },
 
@@ -42,7 +48,7 @@ module.exports = {
 
             return res.status(200).json(response);
         } catch (error) {
-            return res.status(500).json({ error: error.message })
+            return responseException(res, error);
         }
     },
 
@@ -63,8 +69,18 @@ module.exports = {
             }
             return res.status(422).json(`Não existe um perfil com este id: ${id}`)
         } catch (error) {
-            return res.status(500).json({ error: error.message })
+            return responseException(res, error);
         }
 
     }
+}
+
+const responseException = (res, error) => {
+    return res.status(500).json({
+        errors: [
+            {
+                field: "",
+                message: "Oops, ocorreu algo inesperado."
+            }]
+    });
 }

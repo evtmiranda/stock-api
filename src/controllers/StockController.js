@@ -1,13 +1,32 @@
 const stockService = require('../services/stockService')
+const util = require('util')
+const moment = require('moment')
 
 module.exports = {
     async post(req, res) {
         try {
+            const filters = {
+                lot: req.body.lot,
+                deleted_at: null
+            }
+
+            const currentStock = await stockService.findAndFilter(filters)
+
+            if (currentStock.length > 0) {
+                return res.status(422).json({
+                    errors: [
+                        {
+                            field: "lote",
+                            message: "Já existe um item cadastrado com este número de lote."
+                        }]
+                })
+            }
+
             const stock = await stockService.create(req.body)
 
             return res.status(201).json(stock)
         } catch (error) {
-            return res.status(500).json({ error: error.message })
+            return responseException(res, error)
         }
     },
 
@@ -19,7 +38,7 @@ module.exports = {
 
             return res.status(200).json(stocks);
         } catch (error) {
-            return res.status(500).json({ error: error.message });
+            return responseException(res, error)
         }
     },
 
@@ -27,19 +46,23 @@ module.exports = {
         try {
             const status = req.params.status;
 
-            const stocks = await stockService.getByFilters(status);
+            const [stocks, metadata] = await stockService.getQuantityByStatus(status);
 
-            if (!stocks.count){
-                return res.status(404).json(`Não foram localizados itens para o status: ${status}`)
+            let stock = stocks.filter(p => p.description === status);
+
+            stock = stock[0]
+
+            if (stock.length === 0) {
+                stock = {
+                    description: "estoque",
+                    quantity: 0
+                }
             }
-            else {
-            return res.status(200).json({
-                "description": status,
-                "quantity": stocks.count
-            });
-        }
+
+            return res.status(200).json(stock)
+
         } catch (error) {
-            return res.status(500).json({ error: error.message });
+            return responseException(res, error)
         }
     },
 
@@ -51,7 +74,7 @@ module.exports = {
 
             return res.status(200).json(stockStatuses)
         } catch (error) {
-            return res.status(500).json({ error: error.message });
+            return responseException(res, error)
         }
     },
 
@@ -63,19 +86,17 @@ module.exports = {
 
             return res.status(200).json(stocks)
         } catch (error) {
-            return res.status(500).json({ error: error.message });
+            return responseException(res, error)
         }
     },
 
-    async getEntryAndOutQuantityByDay(req, res) {
+    async getEntryAndOutQuantityByDay(_req, res) {
         try {
-            const filters = req.params;
-
-            const stocks = await stockService.getEntryAndOutQuantityByDay(filters);
+            const stocks = await stockService.getEntryAndOutQuantityByDay();
 
             return res.status(200).json(stocks)
         } catch (error) {
-            return res.status(500).json({ error: error.message });
+            return responseException(res, error)
         }
     },
 
@@ -88,7 +109,7 @@ module.exports = {
 
             return res.status(200).json(response);
         } catch (error) {
-            return res.status(500).json({ error: error.message })
+            return responseException(res, error)
         }
     },
 
@@ -97,28 +118,76 @@ module.exports = {
             const id = req.params.id;
             const { lot, description, reference, quantity, tag, store, unitValue, outputDate, outputQuantity, stockStatus } = req.body;
 
+            if (outputQuantity > 0 && util.isNullOrUndefined(outputDate)) {
+                return res.status(422).json({
+                    errors: [
+                        {
+                            field: "Data de saída",
+                            message: "O campo data de saída é obrigatório."
+                        }]
+                })
+            }
+
+            if (outputQuantity > quantity) {
+                return res.status(422).json({
+                    errors: [
+                        {
+                            field: "quantidade",
+                            message: "A quantidade de saída não pode ser maior do que a de entrada."
+                        }]
+                })
+            }
+
+            const currentStock = await stockService.findAndFilter({ id })
+
+            if (!util.isNullOrUndefined(outputDate) &&
+                new Date(outputDate) < currentStock[0].entry.date) {
+                return res.status(422).json({
+                    errors: [
+                        {
+                            field: "quantidade",
+                            message: `A data de saída não pode ser menor do que a de entrada (${moment(currentStock[0].entry.date).format('DD/MM/YYYY')}).`
+                        }]
+                })
+            }
+
             const [numberOfAffectedRows, affectedRows] = await stockService.update({
                 id,
                 lot,
                 description,
-                reference, 
-                quantity, 
-                tag, 
-                store, 
-                unitValue, 
-                outputDate, 
-                outputQuantity, 
+                reference,
+                quantity,
+                tag,
+                store,
+                unitValue,
+                outputDate,
+                outputQuantity,
                 stockStatus
             });
 
-            if (numberOfAffectedRows){
+            if (numberOfAffectedRows) {
                 return res.status(200).json(affectedRows);
             }
 
-            return res.status(422).json(`Não existe um estoque com este id: ${id}`)
+            return res.status(422).json({
+                errors: [
+                    {
+                        field: "Id",
+                        message: "Oops, ocorreu algo inesperado."
+                    }]
+            })
         } catch (error) {
-            return res.status(500).json({ error: error.message })
+            return responseException(res, error)
         }
-
     },
+}
+
+const responseException = (res, error) => {
+    return res.status(500).json({
+        errors: [
+            {
+                field: "",
+                message: "Oops, ocorreu algo inesperado."
+            }]
+    })
 }
